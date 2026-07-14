@@ -2202,8 +2202,17 @@ h1:focus {
         flex-direction: row;
         gap: 0;
         height: 100%;
+        -ms-overflow-style: none;
         overflow-x: auto;
+        overscroll-behavior-inline: contain;
         padding: 0;
+        scrollbar-width: none;
+        scroll-snap-type: x proximity;
+        touch-action: pan-x;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+        display: none;
     }
 
     .nav-entry {
@@ -2214,6 +2223,7 @@ h1:focus {
         gap: 4px;
         max-height: none;
         padding: 8px;
+        scroll-snap-align: start;
     }
 
     .nav-entry img {
