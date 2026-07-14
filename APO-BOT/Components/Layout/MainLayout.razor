@@ -1,9 +1,164 @@
 @inherits LayoutComponentBase
+@inject IApoBotApiClient Api
 
-@Body
+<div class="app-shell">
+    <div class="app-stage">
+        <header class="topbar">
+            <button class="topbar-menu" type="button" aria-label="Abrir menu">
+                <img src="/assets/apobot/icon_menu.svg" alt="" />
+            </button>
+
+            <div class="topbar-identity">
+                <span class="topbar-item">
+                    <img src="/assets/apobot/icon_farmacia.svg" alt="" />
+                    <span>@(context?.PharmacyName ?? "--")</span>
+                </span>
+                <span class="topbar-item topbar-user">
+                    <img src="/assets/apobot/icon_usuario.svg" alt="" />
+                    <span>@(context?.UserDisplayName ?? "--")</span>
+                </span>
+            </div>
+
+            @if (context is not null)
+            {
+                <time class="topbar-time" datetime="@context.ServerTime.ToString("O")">@context.ServerTime.ToLocalTime().ToString("dd/MM/yyyy") <span>@context.ServerTime.ToLocalTime().ToString("HH:mm") H</span></time>
+            }
+            else
+            {
+                <time class="topbar-time">--/--/---- <span>--:-- H</span></time>
+            }
+        </header>
+
+        <main class="app-content">
+            @Body
+        </main>
+    </div>
+
+    <aside class="app-sidebar" aria-label="Navegacion principal">
+        <div class="sidebar-logo">
+            <img src="/assets/apobot/Logo_ApoBot.svg" alt="APObot by Apotheka" />
+        </div>
+
+        <nav class="sidebar-nav">
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" Match="NavLinkMatch.All" href="/">
+                <img src="/assets/apobot/icon_1_home.svg" alt="" />
+                <span>Inicio</span>
+            </NavLink>
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/stock">
+                <img src="/assets/apobot/icon_2_stock.svg" alt="" />
+                <span>Stock</span>
+            </NavLink>
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/pedidos">
+                <img src="/assets/apobot/icon_3_pedidos.svg" alt="" />
+                <span>Pedidos</span>
+            </NavLink>
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/carga">
+                <img src="/assets/apobot/icon_4_carga.svg" alt="" />
+                <span>Carga</span>
+            </NavLink>
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/estadisticas">
+                <img src="/assets/apobot/icon_5_estadisticas.svg" alt="" />
+                <span>Estadisticas</span>
+            </NavLink>
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/avisos">
+                <span class="nav-icon-badge">
+                    <img src="/assets/apobot/icon_6_avisos.svg" alt="" />
+                    <b>@(context?.AlertCount.ToString() ?? "--")</b>
+                </span>
+                <span>Avisos</span>
+            </NavLink>
+            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/ajustes">
+                <img src="/assets/apobot/icon_7_ajustes.svg" alt="" />
+                <span>Ajustes</span>
+            </NavLink>
+        </nav>
+
+        <div class="sidebar-controls">
+            <button class="light-toggle @(context?.LightOn == true ? "light-toggle-on" : "light-toggle-off")" type="button" @onclick="ToggleLightAsync" aria-pressed="@(context?.LightOn == true)" disabled="@(context is null || commandPending)">
+                <img src="/assets/apobot/@(context?.LightOn == true ? "icon_luz_ON.svg" : "icon_luz_OFF.svg")" alt="" />
+                <span class="visually-hidden">Luz @(context?.LightOn == true ? "encendida" : "apagada")</span>
+            </button>
+            <div class="machine-actions">
+                <button type="button" class="machine-button machine-pause" aria-label="Pausar" disabled="@(context is null || commandPending)" @onclick="() => ExecuteMachineActionAsync(MachineAction.Pause)">
+                    <img src="/assets/apobot/icon_pausa.svg" alt="" />
+                </button>
+                <button type="button" class="machine-button machine-power" aria-label="Apagar" disabled="@(context is null || commandPending)" @onclick="() => ExecuteMachineActionAsync(MachineAction.PowerOff)">
+                    <img src="/assets/apobot/icon_apagado.svg" alt="" />
+                </button>
+            </div>
+        </div>
+    </aside>
+</div>
 
 <div id="blazor-error-ui" data-nosnippet>
     Se ha producido un error inesperado.
     <a href="." class="reload">Recargar</a>
     <span class="dismiss">x</span>
 </div>
+
+@code {
+    private SystemContextDto? context;
+    private bool commandPending;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            context = await Api.GetSystemContextAsync();
+        }
+        catch (ApiException)
+        {
+            context = null;
+        }
+    }
+
+    private async Task ToggleLightAsync()
+    {
+        if (context is null)
+        {
+            return;
+        }
+
+        commandPending = true;
+        try
+        {
+            var enabled = !context.LightOn;
+            await Api.SetLightAsync(enabled);
+            context = CopyContext(context, enabled);
+        }
+        catch (ApiException)
+        {
+            // The current machine state remains visible when the command fails.
+        }
+        finally
+        {
+            commandPending = false;
+        }
+    }
+
+    private async Task ExecuteMachineActionAsync(MachineAction action)
+    {
+        commandPending = true;
+        try
+        {
+            await Api.ExecuteMachineActionAsync(action);
+        }
+        catch (ApiException)
+        {
+            // Machine command errors are non-destructive and can be retried.
+        }
+        finally
+        {
+            commandPending = false;
+        }
+    }
+
+    private static SystemContextDto CopyContext(SystemContextDto source, bool lightOn) => new()
+    {
+        PharmacyName = source.PharmacyName,
+        UserDisplayName = source.UserDisplayName,
+        ServerTime = source.ServerTime,
+        AlertCount = source.AlertCount,
+        LightOn = lightOn
+    };
+}

@@ -1,127 +1,200 @@
 @page "/"
+@inject IApoBotApiClient Api
 
-<PageTitle>APObot - Display farmacia</PageTitle>
+<PageTitle>Inicio - APObot</PageTitle>
 
-<main class="min-h-screen bg-apobot-gray text-apobot-navy">
-    <section class="mx-auto flex min-h-screen max-w-[1920px] bg-apobot-gray">
-        <div class="flex min-w-0 flex-1 flex-col">
-            <header class="flex h-12 shrink-0 items-center justify-between bg-apobot-cyan px-5 text-[11px] font-semibold uppercase text-white">
-                <div class="flex items-center gap-8">
-                    <button class="grid size-8 place-items-center" aria-label="Abrir menu">
-                        <img class="size-5" src="/assets/apobot/icon_menu.svg" alt="" />
-                    </button>
-                    <div class="flex items-center gap-2">
-                        <img class="size-5" src="/assets/apobot/icon_farmacia.svg" alt="" />
-                        <span>Farmacia Zaragoza</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <img class="size-5" src="/assets/apobot/icon_usuario.svg" alt="" />
-                        <span>Nombre farmaceutico/a</span>
-                    </div>
+<div class="home-screen">
+    <section class="home-column home-left">
+        <article class="capacity-card">
+            <div class="capacity-copy">
+                <h1>Capacidad<br />de almacenamiento</h1>
+                <div class="capacity-state">
+                    <span>Estado</span>
+                    <strong>@(dashboard?.Capacity.Status ?? "Sin datos")@if (!string.IsNullOrWhiteSpace(dashboard?.Capacity.StatusDetail)) { <small>&nbsp;(@dashboard.Capacity.StatusDetail)</small> }</strong>
                 </div>
-                <time class="text-[10px] font-medium tracking-normal">14/02/2026&nbsp;&nbsp;10:42 H</time>
-            </header>
-
-            <div class="grid flex-1 grid-cols-[1.03fr_1fr] gap-4 p-5 pr-4">
-                <section class="grid min-h-0 grid-rows-[1fr_1.1fr] gap-4">
-                    <article class="rounded-lg bg-gradient-to-r from-apobot-coral-dark to-apobot-coral-soft p-6 text-white shadow-sm">
-                        <div class="flex h-full justify-between gap-6">
-                            <div class="min-w-0">
-                                <h1 class="text-[20px] font-bold leading-tight">Capacidad<br />de almacenamiento</h1>
-                                <div class="mt-5 inline-flex rounded-full bg-white/85 px-6 py-2 text-[12px] font-bold uppercase text-apobot-coral-dark">
-                                    Alto limitado
-                                </div>
-                                <ul class="mt-6 space-y-2 text-[12px] font-semibold leading-tight">
-                                    <li>1 ud. Serc 16 MG 30 COMP</li>
-                                    <li>4 uds. Durogesic Matrix 100 5 parches</li>
-                                    <li>2 uds. Ibuhexal Akut 40 MG</li>
-                                    <li>6 uds. Synofen Ibuprofeno 40 MG</li>
-                                </ul>
-                            </div>
-                            <div class="flex w-44 flex-col items-center justify-center">
-                                <div class="grid size-36 place-items-center rounded-full border-[12px] border-white/75 bg-white/10 text-[42px] font-bold leading-none">
-                                    92%
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="overflow-hidden rounded-lg bg-white p-3 shadow-sm">
-                        <div class="grid h-full grid-cols-2 grid-rows-2 gap-2">
-                            <div class="camera-tile"><span>24</span></div>
-                            <div class="camera-tile"><span>23</span></div>
-                            <div class="camera-tile"><span>22</span></div>
-                            <div class="camera-tile"><span>21</span></div>
-                        </div>
-                    </article>
-                </section>
-
-                <section class="grid min-h-0 grid-rows-[1fr_auto_auto] gap-4">
-                    <article class="rounded-lg bg-white p-5 shadow-sm">
-                        <div class="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
-                            <div>
-                                <p class="text-[12px] font-bold uppercase text-apobot-cyan">Ultimas</p>
-                                <h2 class="text-[20px] font-bold uppercase">Salidas</h2>
-                            </div>
-                            <button class="rounded-full bg-apobot-cyan/15 px-4 py-2 text-[11px] font-bold uppercase text-apobot-cyan">Ver salidas</button>
-                        </div>
-                        <div class="space-y-2 text-[12px] font-semibold">
-                            <div class="activity-row"><span>2 uds. Durogesic Matrix 100 5 parches</span><time>12:45 H</time></div>
-                            <div class="activity-row"><span>1 ud. Ibuhexal Akut 40 MG</span><time>12:37 H</time></div>
-                            <div class="activity-row"><span>1 ud. Serc 16 MG 30 COMP</span><time>12:22 H</time></div>
-                            <div class="activity-row"><span>1 ud. Synofen Ibuprofeno 40 MG</span><time>12:08 H</time></div>
-                            <div class="activity-row"><span>2 uds. Durogesic Matrix 100 5 parches</span><time>11:57 H</time></div>
-                            <div class="activity-row"><span>1 ud. Serc 16 MG 30 COMP</span><time>11:46 H</time></div>
-                        </div>
-                    </article>
-
-                    <article class="rounded-lg bg-apobot-cyan p-4 text-white shadow-sm">
-                        <div class="grid grid-cols-[88px_1fr] gap-4">
-                            <div class="flex items-center justify-center gap-2 rounded-lg bg-white/15 p-3">
-                                <span class="text-3xl font-bold">7</span>
-                                <span class="text-[11px] font-bold uppercase leading-none">Avisos</span>
-                            </div>
-                            <ul class="space-y-2 text-[12px] font-semibold">
-                                <li>Dispensacion no realizada E2 / F25</li>
-                                <li>Dispensacion no realizada E4 / F16</li>
-                                <li>Falta stock Ibuprofen Cinfa 40 MG</li>
-                            </ul>
-                        </div>
-                    </article>
-
-                    <article class="rounded-lg bg-white p-4 shadow-sm">
-                        <h2 class="mb-3 text-[13px] font-bold uppercase text-apobot-navy/70">Nivel de prioridad</h2>
-                        <div class="grid grid-cols-3 gap-3">
-                            <button class="priority-pill bg-apobot-cyan text-white">Normal</button>
-                            <button class="priority-pill bg-apobot-cyan text-white">Rapida</button>
-                            <button class="priority-pill bg-apobot-coral text-white">Urgente</button>
-                        </div>
-                    </article>
-                </section>
+                <p class="eyebrow arrow-label">Ultimas entradas</p>
+                @if (dashboard?.RecentEntries.Count > 0)
+                {
+                    <ul>
+                        @foreach (var item in dashboard.RecentEntries.Take(4))
+                        {
+                            <li><strong>@FormatQuantity(item.Quantity)</strong><span>@item.ProductDescription</span></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <BackendState Loading="loading" Error="@error" Compact="true" Title="Sin entradas" Detail="No hay movimientos recientes." />
+                }
             </div>
-        </div>
+            <div class="capacity-meter" style="--capacity:@CapacityCssValue" aria-label="@($"Capacidad al {CapacityPercentage} por ciento")">
+                <span><strong>@(dashboard is null ? "--" : CapacityPercentage.ToString("0"))</strong>%</span>
+            </div>
+        </article>
 
-        <aside class="flex w-[114px] shrink-0 flex-col bg-apobot-navy text-white">
-            <div class="grid h-20 place-items-center border-b border-white/10 px-4">
-                <img class="w-24" src="/assets/apobot/Logo_ApoBot.svg" alt="APObot" />
-            </div>
-            <nav class="flex flex-1 flex-col gap-2 px-3 py-5">
-                <a class="side-link side-link-active" href="#"><img src="/assets/apobot/icon_1_home.svg" alt="" />Inicio</a>
-                <a class="side-link" href="#"><img src="/assets/apobot/icon_2_stock.svg" alt="" />Stock</a>
-                <a class="side-link" href="#"><img src="/assets/apobot/icon_3_pedidos.svg" alt="" />Pedidos</a>
-                <a class="side-link" href="#"><img src="/assets/apobot/icon_4_carga.svg" alt="" />Carga</a>
-                <a class="side-link" href="#"><img src="/assets/apobot/icon_5_estadisticas.svg" alt="" />Estadisticas</a>
-                <a class="side-link" href="#"><img src="/assets/apobot/icon_6_avisos.svg" alt="" />Avisos</a>
-                <a class="side-link" href="#"><img src="/assets/apobot/icon_7_ajustes.svg" alt="" />Ajustes</a>
-            </nav>
-            <div class="space-y-3 px-4 pb-5">
-                <button class="grid h-10 w-full place-items-center rounded-lg border border-apobot-coral text-apobot-coral" aria-label="Pausar">
-                    <img class="size-5" src="/assets/apobot/icon_pausa.svg" alt="" />
-                </button>
-                <button class="grid h-10 w-full place-items-center rounded-lg border border-apobot-cyan text-apobot-cyan" aria-label="Apagar">
-                    <img class="size-5" src="/assets/apobot/icon_apagado.svg" alt="" />
-                </button>
-            </div>
-        </aside>
+        <article class="camera-card">
+            @if (SelectedCamera is not null)
+            {
+                <img src="@SelectedCamera.StreamUrl" alt="@SelectedCamera.Name" />
+            }
+            else
+            {
+                <div class="camera-placeholder">
+                    <img src="/assets/apobot/ilustracion_cajas_balda.svg" alt="" />
+                    <BackendState Loading="loading" Error="@error" Inverse="true" Title="Camara no disponible" Detail="La señal se mostrara cuando el backend publique una fuente activa." />
+                </div>
+            }
+            @if (dashboard?.Cameras.Count > 0)
+            {
+                <div class="camera-selector" aria-label="Seleccion de camara">
+                    @foreach (var camera in dashboard.Cameras)
+                    {
+                        <button class="@(selectedCameraId == camera.Id ? "camera-active" : "")" type="button" disabled="@(!camera.Available)" @onclick="() => selectedCameraId = camera.Id"><i></i>@camera.Name</button>
+                    }
+                </div>
+            }
+        </article>
     </section>
-</main>
+
+    <section class="home-column home-right">
+        <article class="panel exits-panel">
+            <header class="panel-heading">
+                <div class="heading-symbol">▦</div>
+                <h2>Ultimas<br />salidas <span>›</span></h2>
+                <a href="/estadisticas">Ver salidas</a>
+            </header>
+            <div class="exit-list">
+                @if (dashboard?.RecentDispensations.Count > 0)
+                {
+                    @foreach (var item in dashboard.RecentDispensations)
+                    {
+                        <div class="exit-row">
+                            <strong>@FormatQuantity(item.Quantity)</strong>
+                            <span>@item.ProductDescription</span>
+                            <time datetime="@item.DispensedAt.ToString("O")">@item.DispensedAt.ToLocalTime().ToString("HH:mm") H</time>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <BackendState Loading="loading" Error="@error" Compact="true" Title="Sin salidas" Detail="No hay dispensaciones recientes." />
+                }
+            </div>
+        </article>
+
+        <article class="alerts-card" id="avisos">
+            <div class="alerts-count">
+                <div><span>!</span><strong>@(dashboard?.Alerts.Count(alert => !alert.Resolved).ToString() ?? "--")</strong></div>
+                <h2>Avisos</h2>
+            </div>
+            @if (ActiveAlerts.Count > 0)
+            {
+                <ul>
+                    @foreach (var alert in ActiveAlerts.Take(3))
+                    {
+                        <li><button type="button" disabled="@actionPending" aria-label="Marcar aviso como resuelto" @onclick="() => ResolveAlertAsync(alert.Id)"></button><span>@alert.Message</span>@if (!string.IsNullOrWhiteSpace(alert.Location)) { <strong>@alert.Location</strong> }</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <BackendState Loading="loading" Error="@error" Compact="true" Inverse="true" Title="Sin avisos" Detail="No hay alertas activas." />
+            }
+        </article>
+
+        <article class="panel priority-card">
+            <h2>Nivel de prioridad</h2>
+            <div class="priority-options">
+                @foreach (var priority in PriorityOptions)
+                {
+                    <button class="priority-option @(dashboard?.PriorityMode == priority.Mode ? "priority-selected" : "")" type="button" disabled="@(dashboard is null || actionPending)" @onclick="() => SetPriorityAsync(priority.Mode)">
+                        <span aria-hidden="true">@priority.Rank</span>@priority.Label
+                    </button>
+                }
+            </div>
+        </article>
+    </section>
+</div>
+
+@code {
+    private static readonly (PriorityMode Mode, string Label, int Rank)[] PriorityOptions =
+    [
+        (PriorityMode.Load, "Cargar", 2),
+        (PriorityMode.Dispense, "Dispensar", 1),
+        (PriorityMode.Optimize, "Optimizar", 3)
+    ];
+
+    private DashboardDto? dashboard;
+    private string? selectedCameraId;
+    private bool loading = true;
+    private bool actionPending;
+    private string? error;
+
+    private decimal CapacityPercentage => Math.Clamp(dashboard?.Capacity.Percentage ?? 0, 0, 100);
+    private string CapacityCssValue => $"{CapacityPercentage.ToString("0.##", CultureInfo.InvariantCulture)}%";
+    private IReadOnlyList<AlertDto> ActiveAlerts => dashboard?.Alerts.Where(alert => !alert.Resolved).ToArray() ?? [];
+    private CameraFeedDto? SelectedCamera => dashboard?.Cameras.FirstOrDefault(camera => camera.Id == selectedCameraId && camera.Available);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDashboardAsync();
+    }
+
+    private async Task LoadDashboardAsync()
+    {
+        loading = true;
+        error = null;
+        try
+        {
+            dashboard = await Api.GetDashboardAsync();
+            selectedCameraId = dashboard.Cameras.FirstOrDefault(camera => camera.Available)?.Id;
+        }
+        catch (ApiException exception)
+        {
+            dashboard = null;
+            error = exception.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task ResolveAlertAsync(string alertId)
+    {
+        actionPending = true;
+        try
+        {
+            await Api.ResolveAlertAsync(alertId);
+            await LoadDashboardAsync();
+        }
+        catch (ApiException exception)
+        {
+            error = exception.Message;
+        }
+        finally
+        {
+            actionPending = false;
+        }
+    }
+
+    private async Task SetPriorityAsync(PriorityMode mode)
+    {
+        actionPending = true;
+        try
+        {
+            await Api.SetPriorityModeAsync(mode);
+            await LoadDashboardAsync();
+        }
+        catch (ApiException exception)
+        {
+            error = exception.Message;
+        }
+        finally
+        {
+            actionPending = false;
+        }
+    }
+
+    private static string FormatQuantity(int quantity) => quantity == 1 ? "1 ud." : $"{quantity} uds.";
+}

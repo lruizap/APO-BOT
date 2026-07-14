@@ -1,0 +1,74 @@
+@if (Points.Count == 0)
+{
+    <div class="chart-empty"><BackendState Loading="Loading" Error="@Error" Title="Grafico sin datos" Detail="La serie se mostrara cuando el backend devuelva valores." /></div>
+}
+else
+{
+    <div class="area-chart" style="--chart-columns:@Points.Count" role="img" aria-label="@AriaLabel">
+        <svg viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+            <polygon class="area-series-secondary" points="@BuildPolygon(false)" />
+            <polygon class="area-series-primary" points="@BuildPolygon(true)" />
+            <polyline class="area-line-secondary" points="@BuildPolyline(false)" />
+            <polyline class="area-line-primary" points="@BuildPolyline(true)" />
+        </svg>
+        <div class="chart-axis-labels" aria-hidden="true">
+            @foreach (var indexedPoint in Points.Select((point, index) => (Point: point, Index: index)))
+            {
+                <span>@(ShouldShowLabel(indexedPoint.Index) ? indexedPoint.Point.Label : string.Empty)</span>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ChartPointDto> Points { get; set; } = [];
+
+    [Parameter]
+    public string AriaLabel { get; set; } = "Grafico de areas";
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public string? Error { get; set; }
+
+    private decimal Maximum => Math.Max(1, Points.Select(point => point.PrimaryValue + point.SecondaryValue).DefaultIfEmpty(1).Max());
+
+    private string BuildPolygon(bool primary)
+    {
+        var lastIndex = Math.Max(Points.Count - 1, 1);
+        var values = Points.Select((point, index) =>
+        {
+            var x = index * 1000m / lastIndex;
+            var value = primary ? point.PrimaryValue : point.PrimaryValue + point.SecondaryValue;
+            var y = 300m - Math.Clamp(value / Maximum * 260m, 0, 260);
+            return $"{x.ToString("0.##", CultureInfo.InvariantCulture)},{y.ToString("0.##", CultureInfo.InvariantCulture)}";
+        });
+
+        return $"0,300 {string.Join(" ", values)} 1000,300";
+    }
+
+    private string BuildPolyline(bool primary)
+    {
+        var lastIndex = Math.Max(Points.Count - 1, 1);
+        return string.Join(" ", Points.Select((point, index) =>
+        {
+            var x = index * 1000m / lastIndex;
+            var value = primary ? point.PrimaryValue : point.PrimaryValue + point.SecondaryValue;
+            var y = 300m - Math.Clamp(value / Maximum * 260m, 0, 260);
+            return $"{x.ToString("0.##", CultureInfo.InvariantCulture)},{y.ToString("0.##", CultureInfo.InvariantCulture)}";
+        }));
+    }
+
+    private bool ShouldShowLabel(int index)
+    {
+        var step = Points.Count switch
+        {
+            > 14 => 3,
+            > 8 => 2,
+            _ => 1
+        };
+        return index % step == 0 || index == Points.Count - 1;
+    }
+}

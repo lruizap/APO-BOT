@@ -1,0 +1,36 @@
+<div class="data-table-wrap history-table-wrap">
+    <table class="data-table history-table">
+        <thead>
+            <tr><th>Id</th><th>Codigo</th><th>Descripcion</th><th>Modulo</th><th>Balda</th><th>Pos. X</th><th>Pos. Y</th><th>F. caducidad</th><th>Lote</th><th>N. serie</th><th>Fecha</th><th>@(Rejected ? "Causa rechazo" : "Salida")</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                <tr>
+                    <td>@item.Id</td><td>@item.Code</td><td>@item.Description</td><td>@item.Module</td><td>@item.Shelf</td><td>@item.PositionX</td><td>@item.PositionY</td>
+                    <td>@item.ExpirationDate?.ToString("MM/yyyy")</td><td>@item.Batch</td><td>@item.SerialNumber</td><td>@item.OccurredAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@(Rejected ? item.RejectionCause : item.OutputName)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Items.Count == 0)
+    {
+        <BackendState Loading="Loading" Error="@Error" Compact="true" Title="Sin registros" Detail="El historico se completara con los datos del backend." />
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<HistoryEntryDto> Items { get; set; } = [];
+
+    [Parameter]
+    public bool Rejected { get; set; }
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public string? Error { get; set; }
+}

@@ -9,14 +9,25 @@
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["APO-BOT.styles.css"]" />
     <ImportMap />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta name="theme-color" content="#1f2144" />
+    <link rel="icon" type="image/svg+xml" href="/assets/apobot/favicon-apobot.svg?v=20260714" />
+    <link rel="shortcut icon" type="image/svg+xml" href="/assets/apobot/favicon-apobot.svg?v=20260714" />
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
 <body>
     <Routes @rendermode="InteractiveServer" />
     <ReconnectModal />
-    <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="@Assets["_framework/blazor.web.js"]" autostart="false"></script>
+    <script>
+        Blazor.start({
+            circuit: {
+                configureSignalR: function (builder) {
+                    builder.configureLogging("warning");
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

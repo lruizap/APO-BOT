@@ -1,0 +1,128 @@
+@page "/ajustes"
+@inject IApoBotApiClient Api
+@inject NavigationManager Navigation
+
+<PageTitle>Ajustes - APObot</PageTitle>
+
+<div class="settings-screen">
+    <header class="screen-title settings-title">
+        <img src="/assets/apobot/icon_7_ajustes.svg" alt="" />
+        <div>
+            <h1>Ajustes</h1>
+            <p>Configuracion del display APObot</p>
+        </div>
+    </header>
+
+    @if (preferences is not null)
+    {
+        <EditForm Model="preferences" OnValidSubmit="SaveAsync" class="settings-form">
+            <section class="panel settings-panel settings-identity">
+                <h2>Identificacion</h2>
+                <label>
+                    <span>Farmacia</span>
+                    <InputText @bind-Value="preferences.PharmacyName" />
+                </label>
+                <label>
+                    <span>Usuario mostrado</span>
+                    <InputText @bind-Value="preferences.UserDisplayName" />
+                </label>
+            </section>
+
+            <section class="panel settings-panel">
+                <h2>Pantalla</h2>
+                <label class="range-setting">
+                    <span>Brillo <strong>@preferences.ScreenBrightness%</strong></span>
+                    <input type="range" min="20" max="100" step="5" @bind="preferences.ScreenBrightness" />
+                </label>
+                <label>
+                    <span>Actualizacion de datos</span>
+                    <select @bind="preferences.RefreshIntervalSeconds">
+                        <option value="15">Cada 15 segundos</option>
+                        <option value="30">Cada 30 segundos</option>
+                        <option value="60">Cada minuto</option>
+                        <option value="300">Cada 5 minutos</option>
+                    </select>
+                </label>
+            </section>
+
+            <section class="panel settings-panel settings-notifications">
+                <div>
+                    <h2>Avisos sonoros</h2>
+                    <p>Reproducir una señal cuando el sistema reciba un aviso.</p>
+                </div>
+                <label class="switch-control">
+                    <input type="checkbox" @bind="preferences.AlertSoundEnabled" />
+                    <span aria-hidden="true"></span>
+                    <b>@(preferences.AlertSoundEnabled ? "Activados" : "Desactivados")</b>
+                </label>
+            </section>
+
+            <footer class="settings-actions">
+                <p class="settings-message" role="status">@message</p>
+                <button type="submit" disabled="@saving">@(saving ? "Guardando" : "Guardar ajustes")</button>
+            </footer>
+        </EditForm>
+    }
+    else
+    {
+        <div class="panel settings-loading">
+            <BackendState Loading="loading" Error="@error" Title="Ajustes no disponibles" Detail="No se ha podido obtener la configuracion del backend." />
+        </div>
+    }
+</div>
+
+@code {
+    private SystemPreferencesDto? preferences;
+    private bool loading = true;
+    private bool saving;
+    private string? error;
+    private string? message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            preferences = await Api.GetSystemPreferencesAsync();
+        }
+        catch (ApiException exception)
+        {
+            error = exception.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task SaveAsync()
+    {
+        if (preferences is null)
+        {
+            return;
+        }
+
+        saving = true;
+        message = null;
+        try
+        {
+            preferences = await Api.UpdateSystemPreferencesAsync(new UpdateSystemPreferencesRequest
+            {
+                PharmacyName = preferences.PharmacyName,
+                UserDisplayName = preferences.UserDisplayName,
+                AlertSoundEnabled = preferences.AlertSoundEnabled,
+                ScreenBrightness = preferences.ScreenBrightness,
+                RefreshIntervalSeconds = preferences.RefreshIntervalSeconds
+            });
+            message = "Ajustes guardados correctamente.";
+            Navigation.Refresh(forceReload: true);
+        }
+        catch (ApiException exception)
+        {
+            message = exception.Message;
+        }
+        finally
+        {
+            saving = false;
+        }
+    }
+}

@@ -1,0 +1,112 @@
+@page "/avisos"
+@inject IApoBotApiClient Api
+@inject NavigationManager Navigation
+
+<PageTitle>Avisos - APObot</PageTitle>
+
+<div class="alerts-screen">
+    <header class="screen-title alerts-title">
+        <img src="/assets/apobot/icon_6_avisos.svg" alt="" />
+        <div>
+            <h1>Avisos</h1>
+            <p>@ActiveCount avisos activos</p>
+        </div>
+        <div class="view-switch" aria-label="Filtrar avisos">
+            <button class="@(!showResolved ? "selected" : "")" type="button" @onclick="() => SetFilter(false)">Activos</button>
+            <button class="@(showResolved ? "selected" : "")" type="button" @onclick="() => SetFilter(true)">Resueltos</button>
+        </div>
+    </header>
+
+    <section class="alerts-list" aria-live="polite">
+        @if (VisibleAlerts.Count > 0)
+        {
+            @foreach (var alert in VisibleAlerts)
+            {
+                <article class="alert-row @(alert.Resolved ? "alert-row-resolved" : "")">
+                    <span class="alert-severity alert-severity-@NormalizeSeverity(alert.Severity)" aria-hidden="true">!</span>
+                    <div class="alert-copy">
+                        <h2>@alert.Message</h2>
+                        <p>@(string.IsNullOrWhiteSpace(alert.Location) ? "Sistema APObot" : alert.Location)</p>
+                    </div>
+                    <time datetime="@alert.CreatedAt.ToString("O")">@alert.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm") H</time>
+                    @if (!alert.Resolved)
+                    {
+                        <button class="alert-resolve" type="button" disabled="@actionPending" @onclick="() => ResolveAsync(alert.Id)">
+                            Marcar resuelto
+                        </button>
+                    }
+                    else
+                    {
+                        <span class="alert-status">Resuelto</span>
+                    }
+                </article>
+            }
+        }
+        else
+        {
+            <div class="panel alerts-empty">
+                <BackendState Loading="loading" Error="@error" Title="Sin avisos" Detail="No hay avisos en esta vista." />
+            </div>
+        }
+    </section>
+</div>
+
+@code {
+    private IReadOnlyList<AlertDto> alerts = [];
+    private bool showResolved;
+    private bool loading = true;
+    private bool actionPending;
+    private string? error;
+
+    private int ActiveCount => alerts.Count(alert => !alert.Resolved);
+    private IReadOnlyList<AlertDto> VisibleAlerts => alerts.Where(alert => alert.Resolved == showResolved).ToArray();
+
+    protected override async Task OnInitializedAsync() => await LoadAsync();
+
+    private void SetFilter(bool resolved) => showResolved = resolved;
+
+    private async Task LoadAsync()
+    {
+        loading = true;
+        error = null;
+        try
+        {
+            alerts = await Api.GetAlertsAsync(includeResolved: true);
+        }
+        catch (ApiException exception)
+        {
+            alerts = [];
+            error = exception.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private async Task ResolveAsync(string alertId)
+    {
+        actionPending = true;
+        try
+        {
+            await Api.ResolveAlertAsync(alertId);
+            await LoadAsync();
+            Navigation.Refresh(forceReload: true);
+        }
+        catch (ApiException exception)
+        {
+            error = exception.Message;
+        }
+        finally
+        {
+            actionPending = false;
+        }
+    }
+
+    private static string NormalizeSeverity(string value) => value.ToLowerInvariant() switch
+    {
+        "high" => "high",
+        "low" => "low",
+        _ => "medium"
+    };
+}

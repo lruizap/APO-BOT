@@ -1,204 +1,175 @@
 # APObot Frontend
 
-Interfaz web del sistema **APObot para farmacia**, desarrollada con Blazor y Tailwind CSS. El objetivo del proyecto es reproducir de forma fiel, clara y mantenible las pantallas del display táctil de APObot a partir de la documentación gráfica incluida en el repositorio.
+Interfaz responsive del display APObot para farmacia, desarrollada con Blazor y Tailwind CSS a partir de las pantallas, colores, iconos y tipografias incluidas en `resources`.
 
-> Estado: frontend en desarrollo. Actualmente utiliza datos de demostración y todavía no integra un backend ni una API real.
+El producto principal de este repositorio es el frontend. `demo/APO-BOT.DemoApi` proporciona una API local con SQLite para probar la interfaz de extremo a extremo; no sustituye al backend de produccion.
 
-## Descripción
+## Funcionalidad disponible
 
-APObot es una interfaz orientada a la gestión visual de un sistema automatizado de farmacia. El proyecto está diseñado para una pantalla táctil 16:9 y prioriza la legibilidad, los controles grandes y una navegación sencilla para entornos de trabajo.
+- Pantallas de Inicio, Stock, Pedidos, Carga, Estadisticas, Avisos y Ajustes.
+- Adaptacion para escritorio, portatiles, tabletas y moviles.
+- Assets oficiales APObot y tipografia Montserrat.
+- Cliente HTTP tipado y contratos preparados para integrar el backend real.
+- Estados de carga, error y ausencia de datos.
+- Graficos alimentados por API.
+- API de demostracion y SQLite regenerable con datos de prueba.
+- Aviso de comprobacion que se reactiva cada vez que arranca la API demo.
 
-La aplicación permitirá representar progresivamente:
+## Tecnologias
 
-- Resumen general del sistema y su capacidad.
-- Estado de cámaras y módulos.
-- Últimas salidas y movimientos.
-- Avisos, incidencias y prioridades.
-- Consulta y gestión de stock.
-- Detalle de productos.
-- Flujos de dispensación, pedidos y carga.
-- Estadísticas operativas.
-
-## Alcance actual
-
-- Proyecto centrado exclusivamente en la interfaz de usuario.
-- Datos mock hasta que exista un contrato de API.
-- Sin autenticación, persistencia ni integración backend por ahora.
-- Diseño basado en los documentos de referencia disponibles en `resources/`.
-
-Referencias visuales principales:
-
-- `resources/APObot - Ficheros display software - parte 1/APObot - Interfaz display soft Zgz.pdf`
-- `resources/APObot - Ficheros display software - parte 1/Logo, iconos y colores/APObot - Gama colores.pdf`
-
-## Tecnologías
-
-- **.NET 10**
-- **Blazor Web App**
-- **C#**
-- **Razor Components**
-- **Tailwind CSS 4**
-- **HTML5 y CSS3**
-- **Montserrat** como tipografía principal
-- Assets SVG y PNG propios de APObot
-
-## Paleta visual
-
-| Uso | Color |
-|---|---|
-| Azul cian principal | `#3cb2dd` |
-| Azul oscuro / navy | `#1f2144` |
-| Coral | `#e1806f` |
-| Fondo gris claro | `#ececec` |
-| Gradiente azul | `#3cb2dd` → `#9bd4e6` |
-| Gradiente coral | `#d86467` → `#f6b683` |
+- .NET 10 y Blazor Web App con renderizado interactivo de servidor.
+- C# y Razor Components.
+- Tailwind CSS 4.
+- SQLite con Entity Framework Core en el entorno demo.
+- Montserrat y recursos graficos oficiales de APObot.
 
 ## Requisitos
 
-Antes de comenzar necesitas:
-
-- .NET 10 SDK
-- Node.js LTS y npm
-- Git
-- Visual Studio, Visual Studio Code o Codex
+- Git.
+- [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0).
+- Node.js 20 o posterior y npm.
+- Windows 10/11 para ejecutar los scripts incluidos sin adaptaciones.
 
 Comprueba las instalaciones:
 
-```bash
+```powershell
+git --version
 dotnet --version
 node --version
 npm --version
-git --version
 ```
 
-## Instalación y ejecución
+## Descargar y probar el proyecto completo
 
-Clona el repositorio:
+1. Clona el repositorio y entra en la carpeta:
 
-```bash
+```powershell
 git clone https://github.com/lruizap/APO-BOT.git
-cd APO-BOT/APO-BOT
+cd APO-BOT
 ```
 
-Instala las dependencias frontend:
+2. Instala Tailwind y genera el CSS:
 
-```bash
-npm install
+```powershell
+npm ci --prefix .\APO-BOT
+npm run css:build --prefix .\APO-BOT
 ```
 
-Genera los estilos de Tailwind:
+3. Crea desde cero la base SQLite con todos los datos de prueba:
 
-```bash
-npm run css:build
+```powershell
+.\scripts\database\create-demo-database.bat
 ```
 
-Ejecuta la aplicación:
+La base tambien se crea automaticamente si no existe al arrancar la API.
 
-```bash
-dotnet run
+4. Arranca la API y el frontend juntos:
+
+```powershell
+.\scripts\start-demo.bat
 ```
 
-Para desarrollo con recarga automática de estilos, utiliza dos terminales:
+Alternativa desde PowerShell:
 
-```bash
-npm run css:watch
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start-demo.ps1
 ```
 
-```bash
-dotnet watch
+5. Abre las direcciones locales:
+
+- Frontend: `http://localhost:5168`
+- API demo: `http://localhost:5090`
+- Estado de API y SQLite: `http://localhost:5090/health`
+
+Deten el entorno con `Ctrl+C`. El script cierra tambien la API que haya iniciado.
+
+## Base de datos de demostracion
+
+La base se genera en:
+
+```text
+demo/APO-BOT.DemoApi/Data/apobot-demo.db
 ```
 
-## Comandos principales
+El archivo no se sube a GitHub. `scripts/database/create-demo-database.bat` elimina cualquier base local anterior y reconstruye tablas, configuracion, productos, stock, pedidos, carga, historicos, graficos y avisos.
 
-| Comando | Descripción |
+Para restaurar los datos mientras la API esta en marcha:
+
+```powershell
+Invoke-RestMethod -Method Post http://localhost:5090/api/v1/demo/reset
+```
+
+La API reactiva al iniciar el aviso `Aviso de comprobacion`, incluso si se resolvio en una ejecucion anterior.
+
+## Ejecucion por separado
+
+API demo:
+
+```powershell
+dotnet run --project .\demo\APO-BOT.DemoApi --urls http://localhost:5090
+```
+
+Frontend:
+
+```powershell
+dotnet run --project .\APO-BOT --urls http://localhost:5168
+```
+
+La configuracion local apunta a `http://localhost:5090`. Para integrar otro backend, modifica `Api:Enabled`, `Api:BaseUrl` y `Api:TimeoutSeconds` o usa variables de entorno como `Api__BaseUrl`.
+
+## Desarrollo de estilos
+
+Modo observacion:
+
+```powershell
+npm run css:watch --prefix .\APO-BOT
+```
+
+Antes de entregar cambios:
+
+```powershell
+npm run css:build --prefix .\APO-BOT
+dotnet build .\APO-BOT\APO-BOT.csproj
+dotnet build .\demo\APO-BOT.DemoApi\APO-BOT.DemoApi.csproj
+```
+
+## Rutas
+
+| Ruta | Contenido |
 |---|---|
-| `npm install` | Instala las dependencias de Tailwind |
-| `npm run css:build` | Genera y minimiza el CSS |
-| `npm run css:watch` | Regenera el CSS al detectar cambios |
-| `dotnet build` | Compila y valida el proyecto |
-| `dotnet run` | Ejecuta la aplicación |
-| `dotnet watch` | Ejecuta con recarga durante el desarrollo |
+| `/` | Capacidad, entradas, salidas, camaras, avisos y prioridad |
+| `/stock` | Inventario, detalle de producto y dispensacion |
+| `/pedidos` | Listado y estado del pedido |
+| `/carga` | Configuracion, sesion de carga y rechazos |
+| `/estadisticas` | Historicos y graficos de actividad y capacidad |
+| `/avisos` | Avisos activos, resueltos y accion de resolucion |
+| `/ajustes` | Identificacion, pantalla y avisos sonoros |
 
-## Estructura general
+## Estructura
 
 ```text
 APO-BOT/
-├── APO-BOT/
-│   ├── Components/          # Componentes Razor, páginas y layouts
-│   ├── Styles/              # Archivo fuente de Tailwind
-│   ├── wwwroot/             # CSS generado, imágenes, iconos y fuentes
-│   ├── Program.cs           # Configuración y punto de entrada
-│   ├── APO-BOT.csproj       # Configuración del proyecto .NET
-│   └── package.json         # Scripts y dependencias frontend
-├── resources/               # PDFs, guías y recursos visuales de referencia
-├── README.md
-└── .gitignore
+|-- APO-BOT/                    # Aplicacion Blazor
+|   |-- Components/             # Layout, paginas y componentes
+|   |-- Infrastructure/Api/     # Cliente HTTP y configuracion
+|   |-- Models/                 # Contratos del backend
+|   |-- Styles/                 # Fuente de Tailwind
+|   `-- wwwroot/                # CSS, fuentes e imagenes oficiales
+|-- demo/APO-BOT.DemoApi/       # API local y persistencia SQLite
+|-- docs/backend-integration.md # Contrato de integracion
+|-- resources/                  # Documentacion grafica original
+`-- scripts/                    # Arranque y creacion de base demo
 ```
 
-## Reglas de diseño
+## Referencias visuales
 
-- Mantener el formato 16:9 y usar 1920 × 1080 como referencia principal.
-- Utilizar barra superior cian, navegación lateral navy, fondo gris y tarjetas blancas.
-- No introducir nuevos colores sin contrastarlos con la guía gráfica.
-- Usar los iconos oficiales disponibles en `wwwroot/assets/apobot`.
-- Mantener Montserrat como tipografía principal.
-- Priorizar controles grandes, claros y adecuados para uso táctil.
-- Conservar radios visuales contenidos, próximos a 8 px.
-- Mantener contraste suficiente y estados visibles para selección, error y prioridad.
+- Pantallas: `resources/APObot - Ficheros display software - parte 1/APObot - Interfaz display soft Zgz.pdf`.
+- Colores: `resources/APObot - Ficheros display software - parte 1/Logo, iconos y colores/APObot - Gama colores.pdf`.
+- Assets usados por la app: `APO-BOT/wwwroot/assets/apobot`.
+- Contrato de integracion: `docs/backend-integration.md`.
 
-## Flujo de trabajo recomendado
-
-1. Revisar la pantalla objetivo en los PDF de `resources/`.
-2. Crear o reutilizar componentes Razor.
-3. Aplicar estilos con Tailwind usando los tokens visuales del proyecto.
-4. Utilizar datos mock realistas mientras no exista una API.
-5. Ejecutar `npm run css:build`.
-6. Ejecutar `dotnet build`.
-7. Comparar visualmente el resultado con la referencia antes de cerrar la tarea.
-8. Realizar los cambios en una rama y abrir un pull request.
-
-Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para las convenciones de colaboración.
-
-## Estado del desarrollo
-
-### Disponible
-
-- Estructura inicial de la aplicación Blazor.
-- Identidad visual APObot.
-- Layout principal y navegación lateral.
-- Pantalla inicial o dashboard.
-- Tarjetas de capacidad, cámaras, últimas salidas, avisos y prioridad.
-- Integración de Tailwind CSS.
-
-### Próximas pantallas
-
-- [ ] Stock
-- [ ] Detalle de producto
-- [ ] Dispensación
-- [ ] Pedidos
-- [ ] Carga
-- [ ] Estadísticas
-- [ ] Estados vacíos, carga y error
-- [ ] Diseño adaptable para distintas resoluciones del display
-- [ ] Integración con API y datos reales
-
-## Calidad y buenas prácticas
-
-Antes de abrir un pull request:
-
-```bash
-npm run css:build
-dotnet build
-```
-
-No deben subirse al repositorio:
-
-- `bin/`
-- `obj/`
-- `node_modules/`
-- Archivos locales del IDE
-- Logs o configuraciones privadas
+La interfaz no debe incluir datos operativos de produccion ni colores, logos o iconos ajenos a la guia. Los datos visibles durante la demostracion proceden de SQLite a traves de la API local.
 
 ## Licencia
 
-El repositorio no tiene actualmente una licencia pública definida. Todo el contenido y los recursos visuales deben considerarse reservados hasta que el propietario añada una licencia explícita.
+El repositorio no tiene una licencia publica definida. El codigo y los recursos visuales deben considerarse reservados hasta que el propietario indique lo contrario.
