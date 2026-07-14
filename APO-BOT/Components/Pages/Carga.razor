@@ -1,0 +1,208 @@
+@page "/carga"
+@inject IApoBotApiClient Api
+
+<PageTitle>Carga - APObot</PageTitle>
+
+<div class="load-screen">
+    <aside class="load-controls">
+        <input placeholder="Albaran" aria-label="Albaran" @bind="deliveryNote" />
+        <input placeholder="Proveedor" aria-label="Proveedor" @bind="supplier" />
+        <input placeholder="Codigo albaran" aria-label="Codigo albaran" @bind="deliveryNoteCode" />
+
+        <div class="load-action-buttons">
+            <button class="button-start" type="button" disabled="@(!CanStart)" @onclick="StartLoadAsync">Iniciar</button>
+            <button class="button-pause" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.Pause)">Pausar</button>
+            <button class="button-stop" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.Stop)">Detener</button>
+        </div>
+
+        <fieldset class="panel load-window-selector" disabled="@configurationLoading">
+            <legend><span>Seleccion</span> Ventana de carga</legend>
+            @foreach (var window in configuration.Windows)
+            {
+                <button class="@(selectedWindowId == window.Id ? "selected" : "")" type="button" disabled="@(!window.Available)" @onclick="() => selectedWindowId = window.Id">@window.Name</button>
+            }
+            @if (configuration.Windows.Count == 0)
+            {
+                <BackendState Loading="configurationLoading" Error="@error" Compact="true" Title="Sin ventanas" Detail="La configuracion procedera del backend." />
+            }
+        </fieldset>
+
+        <fieldset class="panel shelf-selector" disabled="@configurationLoading">
+            <legend><span>Seleccion</span> Balda de carga</legend>
+            <img src="/assets/apobot/ilustracion_caja_escaner.svg" alt="" />
+            <div>
+                @foreach (var shelf in configuration.Shelves)
+                {
+                    <button class="@(selectedShelfId == shelf.Id ? "selected" : "")" type="button" disabled="@(!shelf.Available)" @onclick="() => selectedShelfId = shelf.Id">@shelf.Name</button>
+                }
+            </div>
+            @if (configuration.Shelves.Count == 0)
+            {
+                <BackendState Loading="configurationLoading" Error="@error" Compact="true" Title="Sin baldas" Detail="La configuracion procedera del backend." />
+            }
+        </fieldset>
+    </aside>
+
+    <section class="load-tables">
+        <article class="panel load-table-panel">
+            <div class="data-table-wrap">
+                <table class="data-table placeholder-table">
+                    <thead><tr><th>Id</th><th>Codigo</th><th>Descripcion</th><th>Modulo</th><th>Balda</th><th>Pos. X</th><th>Pos. Y</th><th>F. caducidad</th><th>Lote</th><th>N. serie</th><th>Estado</th></tr></thead>
+                    <tbody>
+                        @foreach (var item in session?.LoadedItems ?? [])
+                        {
+                            <tr><td>@item.Id</td><td>@item.Code</td><td>@item.Description</td><td>@item.Module</td><td>@item.Shelf</td><td>@item.PositionX</td><td>@item.PositionY</td><td>@item.ExpirationDate?.ToString("MM/yyyy")</td><td>@item.Batch</td><td>@item.SerialNumber</td><td>@item.Status</td></tr>
+                        }
+                    </tbody>
+                </table>
+                @if (session?.LoadedItems.Count is not > 0)
+                {
+                    <BackendState Loading="sessionLoading" Error="@error" Compact="true" Title="Sin envases cargados" Detail="Los envases procesados apareceran durante la sesion." />
+                }
+            </div>
+            <div class="load-table-actions">
+                <button class="button-start" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.StartShelf)">Iniciar carga balda</button>
+                <button class="button-pause" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.PauseShelf)">Pausar carga balda</button>
+                <button class="button-stop" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.StopShelf)">Detener carga balda</button>
+            </div>
+        </article>
+
+        <article class="panel load-table-panel rejected-table-panel">
+            <div class="data-table-wrap">
+                <table class="data-table placeholder-table">
+                    <thead><tr><th>Id</th><th>Codigo</th><th>Descripcion</th><th>Modulo</th><th>Balda</th><th>Pos. X</th><th>Pos. Y</th><th>F. caducidad</th><th>Lote</th><th>N. serie</th><th>Causa rechazo</th></tr></thead>
+                    <tbody>
+                        @foreach (var item in session?.RejectedItems ?? [])
+                        {
+                            <tr><td>@item.Id</td><td>@item.Code</td><td>@item.Description</td><td>@item.Module</td><td>@item.Shelf</td><td>@item.PositionX</td><td>@item.PositionY</td><td>@item.ExpirationDate?.ToString("MM/yyyy")</td><td>@item.Batch</td><td>@item.SerialNumber</td><td>@item.RejectionCause</td></tr>
+                        }
+                    </tbody>
+                </table>
+                @if (session?.RejectedItems.Count is not > 0)
+                {
+                    <BackendState Loading="sessionLoading" Error="@error" Compact="true" Title="Sin rechazos" Detail="No hay envases rechazados en la sesion activa." />
+                }
+            </div>
+        </article>
+    </section>
+</div>
+
+@code {
+    private LoadConfigurationDto configuration = new();
+    private LoadSessionDto? session;
+    private string deliveryNote = string.Empty;
+    private string supplier = string.Empty;
+    private string deliveryNoteCode = string.Empty;
+    private string selectedWindowId = string.Empty;
+    private string selectedShelfId = string.Empty;
+    private bool configurationLoading = true;
+    private bool sessionLoading = true;
+    private bool commandPending;
+    private string? error;
+
+    private bool CanStart => !commandPending
+        && !string.IsNullOrWhiteSpace(deliveryNote)
+        && !string.IsNullOrWhiteSpace(supplier)
+        && !string.IsNullOrWhiteSpace(deliveryNoteCode)
+        && !string.IsNullOrWhiteSpace(selectedWindowId)
+        && !string.IsNullOrWhiteSpace(selectedShelfId);
+    private bool CanCommand => session is not null && !commandPending;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.WhenAll(LoadConfigurationAsync(), LoadSessionAsync());
+    }
+
+    private async Task LoadConfigurationAsync()
+    {
+        configurationLoading = true;
+        try
+        {
+            configuration = await Api.GetLoadConfigurationAsync();
+        }
+        catch (ApiException exception)
+        {
+            configuration = new();
+            error = exception.Message;
+        }
+        finally
+        {
+            configurationLoading = false;
+        }
+    }
+
+    private async Task LoadSessionAsync()
+    {
+        sessionLoading = true;
+        try
+        {
+            session = await Api.GetActiveLoadSessionAsync();
+        }
+        catch (ApiException exception)
+        {
+            session = null;
+            error = exception.Message;
+        }
+        finally
+        {
+            sessionLoading = false;
+        }
+    }
+
+    private async Task StartLoadAsync()
+    {
+        if (!CanStart)
+        {
+            return;
+        }
+
+        commandPending = true;
+        error = null;
+        try
+        {
+            session = await Api.StartLoadAsync(new StartLoadRequest
+            {
+                DeliveryNote = deliveryNote,
+                Supplier = supplier,
+                DeliveryNoteCode = deliveryNoteCode,
+                WindowId = selectedWindowId,
+                ShelfId = selectedShelfId
+            });
+        }
+        catch (ApiException exception)
+        {
+            error = exception.Message;
+        }
+        finally
+        {
+            commandPending = false;
+        }
+    }
+
+    private async Task SendCommandAsync(LoadCommand command)
+    {
+        if (!CanCommand)
+        {
+            return;
+        }
+
+        commandPending = true;
+        error = null;
+        try
+        {
+            session = await Api.ExecuteLoadCommandAsync(session!.Id, new LoadCommandRequest
+            {
+                Command = command,
+                ShelfId = command is LoadCommand.StartShelf or LoadCommand.PauseShelf or LoadCommand.StopShelf ? selectedShelfId : null
+            });
+        }
+        catch (ApiException exception)
+        {
+            error = exception.Message;
+        }
+        finally
+        {
+            commandPending = false;
+        }
+    }
+}

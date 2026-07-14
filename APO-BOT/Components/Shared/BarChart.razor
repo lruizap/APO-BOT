@@ -1,0 +1,55 @@
+@if (Points.Count == 0)
+{
+    <div class="chart-empty"><BackendState Loading="Loading" Error="@Error" Title="Grafico sin datos" Detail="La serie se mostrara cuando el backend devuelva valores." /></div>
+}
+else
+{
+    <div class="bar-chart" role="img" aria-label="@AriaLabel">
+        <div class="chart-grid-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="bar-series" style="--chart-columns:@Points.Count">
+            @foreach (var indexedPoint in Points.Select((point, index) => (Point: point, Index: index)))
+            {
+                <div class="bar-group" title="@($"{indexedPoint.Point.Label}: {indexedPoint.Point.PrimaryValue} / {indexedPoint.Point.SecondaryValue}")">
+                    <div class="bar-pair">
+                        <i style="height:@ToPercentage(indexedPoint.Point.PrimaryValue)"></i>
+                        <b style="height:@ToPercentage(indexedPoint.Point.SecondaryValue)"></b>
+                    </div>
+                    <span>@(ShouldShowLabel(indexedPoint.Index) ? indexedPoint.Point.Label : string.Empty)</span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public IReadOnlyList<ChartPointDto> Points { get; set; } = [];
+
+    [Parameter]
+    public string AriaLabel { get; set; } = "Grafico de barras";
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public string? Error { get; set; }
+
+    private decimal Maximum => Math.Max(1, Points.SelectMany(point => new[] { point.PrimaryValue, point.SecondaryValue }).DefaultIfEmpty(1).Max());
+
+    private string ToPercentage(decimal value)
+    {
+        var percentage = Math.Clamp(value / Maximum * 100, 0, 100);
+        return $"{percentage.ToString("0.##", CultureInfo.InvariantCulture)}%";
+    }
+
+    private bool ShouldShowLabel(int index)
+    {
+        var step = Points.Count switch
+        {
+            > 14 => 3,
+            > 8 => 2,
+            _ => 1
+        };
+        return index % step == 0 || index == Points.Count - 1;
+    }
+}

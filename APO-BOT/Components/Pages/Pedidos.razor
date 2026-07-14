@@ -1,0 +1,89 @@
+@page "/pedidos"
+@page "/pedidos/{OrderId}"
+@inject IApoBotApiClient Api
+
+<PageTitle>Pedidos - APObot</PageTitle>
+
+<div class="orders-screen">
+    <section class="order-summary">
+        <div><span>Id pedido</span><strong>@(order?.Id ?? "--")</strong></div>
+        <div><span>Solicitado por</span><strong>@(order?.RequestedBy ?? "--")<small>@(order?.Organization ?? "--")</small></strong></div>
+        <div><span>Salida</span><strong>@(order?.OutputName ?? "--")</strong></div>
+        <div><span>Estado</span><strong class="status-preparing">@(order?.Status ?? "--")</strong></div>
+    </section>
+
+    <section class="orders-columns">
+        <article class="panel order-panel">
+            <h1>Listado restante del pedido @if (order is not null) { <strong>#@order.Id</strong> }</h1>
+            <div class="order-products">
+                @if (RemainingLines.Count > 0)
+                {
+                    @foreach (var line in RemainingLines)
+                    {
+                        <div class="order-product"><span>@line.ProductDescription</span><strong>@FormatQuantity(line.RequestedQuantity - line.CompletedQuantity)</strong></div>
+                    }
+                }
+                else
+                {
+                    <BackendState Loading="loading" Error="@error" Title="Sin lineas pendientes" Detail="No existe un pedido activo o todas sus lineas estan completadas." />
+                }
+            </div>
+        </article>
+
+        <article class="panel order-panel completed-order-panel">
+            <h2>Listado completado del pedido</h2>
+            <div class="order-products">
+                @if (CompletedLines.Count > 0)
+                {
+                    @foreach (var line in CompletedLines)
+                    {
+                        <div class="order-product"><span>@line.ProductDescription</span><strong>@FormatQuantity(line.CompletedQuantity)</strong></div>
+                    }
+                }
+                else
+                {
+                    <BackendState Loading="loading" Error="@error" Title="Sin lineas completadas" Detail="Todavia no hay productos dispensados para este pedido." />
+                }
+            </div>
+            @if (order is not null && RemainingLines.Count == 0 && order.Lines.Count > 0)
+            {
+                <span class="completed-label">Completado</span>
+            }
+        </article>
+    </section>
+</div>
+
+@code {
+    [Parameter]
+    public string? OrderId { get; set; }
+
+    private OrderDetailDto? order;
+    private bool loading = true;
+    private string? error;
+
+    private IReadOnlyList<OrderLineDto> RemainingLines => order?.Lines.Where(line => !line.IsCompleted).ToArray() ?? [];
+    private IReadOnlyList<OrderLineDto> CompletedLines => order?.Lines.Where(line => line.CompletedQuantity > 0).ToArray() ?? [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        loading = true;
+        error = null;
+        try
+        {
+            order = string.IsNullOrWhiteSpace(OrderId)
+                ? await Api.GetActiveOrderAsync()
+                : await Api.GetOrderAsync(OrderId);
+        }
+        catch (ApiException exception)
+        {
+            order = null;
+            error = exception.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private static string FormatQuantity(int value) => value == 1 ? "1 ud." : $"{value} uds.";
+}

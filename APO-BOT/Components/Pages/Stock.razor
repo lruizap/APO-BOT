@@ -1,0 +1,302 @@
+@page "/stock"
+@inject IApoBotApiClient Api
+
+<PageTitle>Stock - APObot</PageTitle>
+
+<div class="stock-screen">
+    <section class="stock-workspace">
+        <article class="panel product-list-panel @(selectedProduct is null ? "product-list-full" : "")">
+            <div class="product-table-head">
+                <label>Codigo<input @bind="query.Code" @bind:after="LoadStockAsync" aria-label="Filtrar por codigo" /></label>
+                <label class="active-filter">Descripcion<input @bind="query.Description" @bind:after="LoadStockAsync" aria-label="Filtrar por descripcion" /></label>
+                <label>Categoria<input @bind="query.Category" @bind:after="LoadStockAsync" aria-label="Filtrar por categoria" /></label>
+                <label>Stock<input type="number" min="0" @bind="query.MinimumStock" @bind:after="LoadStockAsync" aria-label="Filtrar por stock minimo" /></label>
+                <label>Observaciones<input @bind="query.Observation" @bind:after="LoadStockAsync" aria-label="Filtrar por observaciones" /></label>
+            </div>
+            <div class="product-list">
+                @if (stock.Items.Count > 0)
+                {
+                    @foreach (var product in stock.Items)
+                    {
+                        <button class="product-row @(selectedProduct?.Id == product.Id ? "product-selected" : "")" type="button" @onclick="() => SelectProductAsync(product)">
+                            <strong>@product.Code</strong>
+                            <span>@product.Description</span>
+                            <span>@product.Category</span>
+                            <span class="@(product.Stock == 0 ? "text-coral" : "")">@FormatQuantity(product.Stock)</span>
+                            <span class="product-note @(!string.IsNullOrWhiteSpace(product.Observation) ? "product-warning" : "")">
+                                @if (!string.IsNullOrWhiteSpace(product.Observation))
+                                {
+                                    <b>@product.Observation</b>
+                                }
+                                @if (product.CanOrder)
+                                {
+                                    <i>Hacer pedido</i>
+                                }
+                            </span>
+                        </button>
+                    }
+                }
+                else
+                {
+                    <BackendState Loading="stockLoading" Error="@stockError" Title="Sin productos" Detail="El inventario se mostrara cuando el backend devuelva resultados." />
+                }
+            </div>
+        </article>
+
+        @if (selectedProduct is not null)
+        {
+            <article class="panel stock-units-panel">
+                <div class="data-table-wrap">
+                    <table class="data-table stock-units-table">
+                        <thead>
+                            <tr><th>Id</th><th>Modulo</th><th>Balda</th><th>Pos. X</th><th>Pos. Y</th><th>F. caducidad</th><th>F. carga</th><th>Lote</th><th>Nº serie</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var unit in units)
+                            {
+                                <tr>
+                                    <td class="cyan-cell">@unit.Id</td><td>@unit.Module</td><td>@unit.Shelf</td><td>@unit.PositionX</td><td>@unit.PositionY</td><td>@unit.ExpirationDate?.ToString("MM/yyyy")</td><td>@unit.LoadedAt?.ToLocalTime().ToString("dd/MM/yyyy")</td><td>@unit.Batch</td><td>@unit.SerialNumber</td>
+                                    <td><button class="table-link table-link-view" type="button" @onclick="() => selectedUnit = unit">Ver</button><button class="table-link table-link-dispense" type="button" disabled="@(string.IsNullOrWhiteSpace(selectedOutputId) || dispensePending)" @onclick="() => DispenseUnitAsync(unit.Id)">Dispensar</button></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @if (units.Count == 0)
+                    {
+                        <BackendState Loading="detailLoading" Error="@detailError" Compact="true" Title="Sin unidades" Detail="No hay envases asociados al producto." />
+                    }
+                </div>
+            </article>
+        }
+    </section>
+
+    <aside class="stock-detail">
+        <article class="panel product-detail-card @(selectedProduct is null ? "product-detail-empty" : "")">
+            @if (selectedProduct is null)
+            {
+                <img src="/assets/apobot/ilustracion_cajas_balda.svg" alt="" />
+                <h2>Seleccione<br />producto<br />para mas info</h2>
+            }
+            else if (detailLoading)
+            {
+                <BackendState Loading="true" />
+            }
+            else if (productDetail is not null)
+            {
+                <div class="product-title">
+                    <img src="/assets/apobot/ilustracion_cajas_balda.svg" alt="" />
+                    <h1>@productDetail.Description</h1>
+                </div>
+                <dl class="product-facts">
+                    <dt>Proveedor</dt><dd>@productDetail.Supplier</dd>
+                    <dt>Categoria</dt><dd>@productDetail.Category</dd>
+                    <dt>Facturable SNS</dt><dd>@(productDetail.IsSnsBillable ? "Si" : "No")</dd>
+                    <dt>Situacion</dt><dd>@productDetail.Situation</dd>
+                    <dt>Cod. nacional</dt><dd>@productDetail.NationalCode</dd>
+                    <dt>EAN13</dt><dd>@productDetail.Ean13</dd>
+                </dl>
+            }
+            else
+            {
+                <BackendState Error="@detailError" Title="Detalle no disponible" Detail="No se ha podido obtener el producto." />
+            }
+        </article>
+
+        <div class="dispense-controls @(selectedProduct is null ? "controls-disabled" : "")">
+            <label class="control-card output-control">
+                <span>Salida</span>
+                <select @bind="selectedOutputId" disabled="@(selectedProduct is null || outputsLoading)">
+                    <option value="">Seleccione una salida</option>
+                    @foreach (var output in outputs.Where(output => output.Available))
+                    {
+                        <option value="@output.Id">@output.Name</option>
+                    }
+                </select>
+            </label>
+
+            <div class="quantity-control" aria-label="Unidades a dispensar">
+                <button type="button" @onclick="DecreaseQuantity" disabled="@(quantity == 0 || selectedProduct is null)">−</button>
+                <strong>@quantity <span>/ @(selectedProduct?.Stock ?? 0)</span></strong>
+                <button type="button" @onclick="IncreaseQuantity" disabled="@(selectedProduct is null || quantity >= selectedProduct.Stock)">+</button>
+            </div>
+
+            <fieldset class="control-card priority-control" disabled="@(selectedProduct is null)">
+                <legend>Prioridad</legend>
+                @foreach (var level in PriorityOptions)
+                {
+                    <button class="@(selectedPriority == level.Priority ? "selected" : "")" type="button" @onclick="() => selectedPriority = level.Priority">@level.Label</button>
+                }
+            </fieldset>
+
+            <button class="primary-gradient-button" type="button" @onclick="DispenseAsync" disabled="@(!CanDispense)">Dispensar</button>
+            @if (!string.IsNullOrWhiteSpace(actionMessage))
+            {
+                <p class="api-action-message" role="status">@actionMessage</p>
+            }
+        </div>
+    </aside>
+</div>
+
+@code {
+    private static readonly (DispensationPriority Priority, string Label)[] PriorityOptions =
+    [
+        (DispensationPriority.High, "Alta"),
+        (DispensationPriority.Medium, "Media"),
+        (DispensationPriority.Low, "Baja")
+    ];
+
+    private readonly StockQuery query = new();
+    private PagedResult<ProductSummaryDto> stock = new();
+    private IReadOnlyList<StockUnitDto> units = [];
+    private IReadOnlyList<OutputDto> outputs = [];
+    private ProductSummaryDto? selectedProduct;
+    private ProductDetailDto? productDetail;
+    private StockUnitDto? selectedUnit;
+    private int quantity;
+    private string selectedOutputId = string.Empty;
+    private DispensationPriority selectedPriority = DispensationPriority.High;
+    private bool stockLoading = true;
+    private bool detailLoading;
+    private bool outputsLoading = true;
+    private bool dispensePending;
+    private string? stockError;
+    private string? detailError;
+    private string? actionMessage;
+
+    private bool CanDispense => selectedProduct is not null && quantity > 0 && !string.IsNullOrWhiteSpace(selectedOutputId) && !dispensePending;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.WhenAll(LoadStockAsync(), LoadOutputsAsync());
+    }
+
+    private async Task LoadStockAsync()
+    {
+        stockLoading = true;
+        stockError = null;
+        try
+        {
+            query.Page = 1;
+            stock = await Api.GetStockAsync(query);
+        }
+        catch (ApiException exception)
+        {
+            stock = new();
+            stockError = exception.Message;
+        }
+        finally
+        {
+            stockLoading = false;
+        }
+    }
+
+    private async Task LoadOutputsAsync()
+    {
+        outputsLoading = true;
+        try
+        {
+            outputs = await Api.GetOutputsAsync();
+        }
+        catch (ApiException exception)
+        {
+            outputs = [];
+            actionMessage = exception.Message;
+        }
+        finally
+        {
+            outputsLoading = false;
+        }
+    }
+
+    private async Task SelectProductAsync(ProductSummaryDto product)
+    {
+        selectedProduct = product;
+        productDetail = null;
+        selectedUnit = null;
+        units = [];
+        quantity = 0;
+        selectedOutputId = string.Empty;
+        detailLoading = true;
+        detailError = null;
+        actionMessage = null;
+        try
+        {
+            var detailTask = Api.GetProductAsync(product.Id);
+            var unitsTask = Api.GetProductUnitsAsync(product.Id);
+            await Task.WhenAll(detailTask, unitsTask);
+            productDetail = await detailTask;
+            units = await unitsTask;
+        }
+        catch (ApiException exception)
+        {
+            detailError = exception.Message;
+        }
+        finally
+        {
+            detailLoading = false;
+        }
+    }
+
+    private void IncreaseQuantity()
+    {
+        if (selectedProduct is not null && quantity < selectedProduct.Stock)
+        {
+            quantity++;
+        }
+    }
+
+    private void DecreaseQuantity()
+    {
+        quantity = Math.Max(0, quantity - 1);
+    }
+
+    private async Task DispenseAsync()
+    {
+        if (!CanDispense || selectedProduct is null)
+        {
+            return;
+        }
+
+        await SendDispensationAsync(quantity, []);
+    }
+
+    private async Task DispenseUnitAsync(string unitId)
+    {
+        if (selectedProduct is null || string.IsNullOrWhiteSpace(selectedOutputId))
+        {
+            return;
+        }
+
+        await SendDispensationAsync(1, [unitId]);
+    }
+
+    private async Task SendDispensationAsync(int requestedQuantity, IReadOnlyList<string> unitIds)
+    {
+        dispensePending = true;
+        actionMessage = null;
+        try
+        {
+            var result = await Api.CreateDispensationAsync(new CreateDispensationRequest
+            {
+                ProductId = selectedProduct!.Id,
+                OutputId = selectedOutputId,
+                Quantity = requestedQuantity,
+                Priority = selectedPriority,
+                UnitIds = unitIds
+            });
+            actionMessage = string.IsNullOrWhiteSpace(result.Status) ? "Dispensacion enviada." : result.Status;
+            quantity = 0;
+            await LoadStockAsync();
+        }
+        catch (ApiException exception)
+        {
+            actionMessage = exception.Message;
+        }
+        finally
+        {
+            dispensePending = false;
+        }
+    }
+
+    private static string FormatQuantity(int value) => value == 1 ? "1 ud." : $"{value} uds.";
+}

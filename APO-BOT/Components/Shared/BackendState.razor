@@ -1,0 +1,37 @@
+<div class="backend-state @(Compact ? "backend-state-compact" : "") @(Inverse ? "backend-state-inverse" : "")" role="status">
+    @if (Loading)
+    {
+        <span class="backend-state-spinner" aria-hidden="true"></span>
+        <strong>Cargando informacion</strong>
+    }
+    else if (!string.IsNullOrWhiteSpace(Error))
+    {
+        <strong>@Title</strong>
+        <span>@Error</span>
+    }
+    else
+    {
+        <strong>@Title</strong>
+        <span>@Detail</span>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public bool Compact { get; set; }
+
+    [Parameter]
+    public bool Inverse { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Sin datos";
+
+    [Parameter]
+    public string Detail { get; set; } = "El backend no ha devuelto informacion.";
+
+    [Parameter]
+    public string? Error { get; set; }
+}
