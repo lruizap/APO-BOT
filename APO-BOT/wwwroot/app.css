@@ -334,15 +334,22 @@ h1:focus {
 }
 
 .capacity-card {
+    --capacity-meter-size: clamp(152px, 11vw, 190px);
+    align-items: stretch;
     background: linear-gradient(115deg, var(--apobot-coral-dark), var(--apobot-coral-soft));
     border-radius: 25px;
+    column-gap: clamp(18px, 1.8vw, 32px);
     color: white;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(220px, 12.5vw, 240px);
+    grid-template-columns: minmax(0, 1fr) var(--capacity-meter-size);
     min-height: 0;
     overflow: hidden;
     padding: clamp(26px, 2.1vw, 40px);
     position: relative;
+}
+
+.capacity-copy {
+    min-width: 0;
 }
 
 .capacity-copy h1 {
@@ -355,8 +362,9 @@ h1:focus {
 
 .capacity-state {
     align-items: center;
-    display: flex;
+    display: grid;
     gap: clamp(16px, 1.5vw, 28px);
+    grid-template-columns: auto minmax(0, 1fr);
     margin-top: clamp(24px, 3vh, 32px);
 }
 
@@ -374,9 +382,10 @@ h1:focus {
     font-size: clamp(14px, 1.05vw, 20px);
     line-height: 1.15;
     max-width: 100%;
+    min-width: 0;
     padding: 10px clamp(14px, 1.2vw, 24px);
     text-transform: uppercase;
-    white-space: nowrap;
+    width: fit-content;
 }
 
 .capacity-state small {
@@ -422,33 +431,36 @@ h1:focus {
 }
 
 .capacity-meter {
+    align-self: center;
     align-items: center;
+    aspect-ratio: 1;
     display: flex;
+    isolation: isolate;
+    justify-self: end;
     justify-content: center;
     position: relative;
+    width: var(--capacity-meter-size);
 }
 
 .capacity-meter::before {
     background: conic-gradient(#c95555 var(--capacity, 0%), white 0);
     border-radius: 50%;
     content: "";
-    height: min(22vw, 24vh, 242px);
-    left: 50%;
-    mask: radial-gradient(farthest-side, transparent calc(100% - clamp(12px, 1vw, 19px)), #000 0);
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - clamp(12px, 1vw, 19px)), #000 0);
+    inset: 0;
+    mask: radial-gradient(farthest-side, transparent calc(100% - clamp(10px, .72vw, 14px)), #000 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - clamp(10px, .72vw, 14px)), #000 0);
     position: absolute;
-    top: 45%;
-    transform: translate(-50%, -50%) rotate(-90deg);
-    width: min(22vw, 24vh, 242px);
+    transform: rotate(-90deg);
 }
 
 .capacity-meter span {
-    font-size: clamp(30px, 3vw, 56px);
+    font-size: clamp(28px, 2vw, 40px);
     font-weight: 300;
     left: 50%;
     position: absolute;
-    top: 45%;
+    top: 50%;
     transform: translate(-50%, -50%);
+    white-space: nowrap;
 }
 
 .capacity-meter strong {
@@ -1790,6 +1802,10 @@ h1:focus {
     min-height: 0;
 }
 
+.settings-screen {
+    overflow-y: auto;
+}
+
 .screen-title {
     align-items: center;
     display: flex;
@@ -1944,15 +1960,16 @@ h1:focus {
     flex: 1;
     gap: clamp(20px, 2vw, 36px);
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr) auto auto;
-    min-height: 0;
+    grid-template-rows: minmax(240px, 1fr) minmax(120px, auto) auto;
+    min-height: 484px;
 }
 
 .settings-panel {
     display: flex;
     flex-direction: column;
-    gap: clamp(22px, 2.5vh, 30px);
+    gap: clamp(18px, 2vh, 24px);
     min-height: 0;
+    overflow: visible;
     padding: clamp(26px, 2.4vw, 46px);
 }
 
@@ -1995,6 +2012,11 @@ h1:focus {
     justify-content: space-between;
 }
 
+.range-setting {
+    display: grid;
+    gap: 8px;
+}
+
 .range-setting input[type="range"] {
     accent-color: var(--apobot-cyan);
     width: 100%;
@@ -2002,9 +2024,11 @@ h1:focus {
 
 .settings-notifications {
     align-items: center;
-    flex-direction: row;
+    display: grid;
+    gap: clamp(24px, 3vw, 56px);
     grid-column: 1 / span 2;
-    justify-content: space-between;
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-height: 120px;
 }
 
 .mobile-stock-filter-label {
@@ -2012,13 +2036,12 @@ h1:focus {
 }
 
 .settings-notifications > div:first-child {
-    flex: 1 1 auto;
     min-width: 0;
 }
 
 .settings-notifications .switch-control {
-    flex: 0 0 auto;
-    margin-left: auto;
+    justify-self: end;
+    margin: 0;
     min-width: 170px;
 }
 
@@ -2026,6 +2049,8 @@ h1:focus {
     color: #777;
     font-size: 12px;
     margin: 8px 0 0;
+    max-width: 620px;
+    line-height: 1.5;
 }
 
 .switch-control {
@@ -2134,7 +2159,18 @@ h1:focus {
     }
 
     .capacity-card {
-        grid-template-columns: minmax(0, 1fr) 175px;
+        --capacity-meter-size: clamp(138px, 11.5vw, 164px);
+        column-gap: 18px;
+        grid-template-columns: minmax(0, 1fr) var(--capacity-meter-size);
+    }
+
+    .capacity-state {
+        gap: 12px;
+    }
+
+    .capacity-state strong {
+        font-size: clamp(12px, 1vw, 16px);
+        padding: 8px 14px;
     }
 
     .capacity-copy li {
@@ -2270,9 +2306,8 @@ h1:focus {
     .alerts-card { order: 4; min-height: 190px; }
     .priority-card { order: 5; min-height: 180px; }
 
-    .capacity-meter::before {
-        height: 220px;
-        width: 220px;
+    .capacity-card {
+        --capacity-meter-size: 190px;
     }
 
     .stock-screen {
@@ -2402,8 +2437,8 @@ h1:focus {
 
     .capacity-state {
         align-items: flex-start;
-        flex-direction: column;
         gap: 10px;
+        grid-template-columns: 1fr;
         margin-top: 22px;
     }
 
@@ -2426,22 +2461,14 @@ h1:focus {
     }
 
     .capacity-meter {
+        --capacity-meter-size: 112px;
         bottom: 35px;
-        height: 112px;
         position: absolute;
         right: 18px;
-        width: 112px;
-    }
-
-    .capacity-meter::before {
-        height: 112px;
-        top: 50%;
-        width: 112px;
     }
 
     .capacity-meter span {
         font-size: 26px;
-        top: 50%;
     }
 
     .exits-panel {
@@ -2771,8 +2798,14 @@ h1:focus {
     .settings-panel,
     .settings-notifications {
         align-items: stretch;
+        display: flex;
         flex-direction: column;
         min-height: 230px;
+    }
+
+    .settings-notifications .switch-control {
+        align-self: flex-start;
+        min-width: 0;
     }
 
     .settings-actions {
@@ -3050,6 +3083,8 @@ h1:focus {
 }
 
 .settings-panel .mud-input-control {
+    flex: 0 0 auto;
+    min-width: 0;
     width: 100%;
 }
 
