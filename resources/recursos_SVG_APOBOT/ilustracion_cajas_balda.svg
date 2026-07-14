@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 91.92 65.15">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #1f2144;
+      }
+
+      .st1 {
+        fill: #c9c9c9;
+      }
+
+      .st2 {
+        fill: #dfeff4;
+      }
+
+      .st3 {
+        fill: #d2e2e7;
+      }
+
+      .st4 {
+        fill: #e4e4e4;
+      }
+    </style>
+  </defs>
+  <polygon class="st2" points="60.44 14.24 32.23 14.24 2.49 59.24 90.18 59.24 60.44 14.24"/>
+  <g>
+    <path class="st1" d="M29.32,11.05h34.02v8.4c0,1.13-.92,2.05-2.05,2.05h-29.92c-1.13,0-2.05-.92-2.05-2.05v-8.4h0Z"/>
+    <path class="st4" d="M55.11,1.52h-17.54c-1.52,0-2.76.51-3.24,1.3l-5,8.22h34.02l-5-8.22c-.48-.8-1.73-1.3-3.24-1.3Z"/>
+    <rect class="st0" x="55.75" y="14.24" width=".84" height=".84"/>
+    <rect class="st0" x="59.11" y="14.24" width=".84" height=".84"/>
+    <rect class="st0" x="55.75" y="17.61" width=".84" height=".84"/>
+    <rect class="st0" x="59.11" y="17.61" width=".84" height=".84"/>
+    <rect class="st0" x="58.48" y="16.97" width=".43" height=".43"/>
+    <rect class="st0" x="58.27" y="15.92" width=".84" height=".84"/>
+    <rect class="st0" x="57.43" y="15.92" width=".84" height=".84"/>
+    <rect class="st0" x="57.63" y="16.97" width=".43" height=".43"/>
+    <rect class="st0" x="56.59" y="15.08" width=".84" height=".84"/>
+    <rect class="st0" x="57.68" y="14.48" width=".35" height=".35"/>
+    <rect class="st0" x="57.63" y="17.81" width=".43" height=".43"/>
+  </g>
+  <rect class="st3" x="2.49" y="59.24" width="87.7" height="4.36"/>
+  <g>
+    <path class="st1" d="M16.42,35.19h59.82v14.76c0,1.99-1.61,3.6-3.6,3.6H20.03c-1.99,0-3.6-1.61-3.6-3.6v-14.76h0Z"/>
+    <path class="st4" d="M61.76,18.45h-30.85c-2.66,0-4.85.89-5.7,2.29l-8.79,14.45h59.82l-8.79-14.45c-.85-1.4-3.03-2.29-5.7-2.29Z"/>
+    <rect class="st0" x="62.89" y="40.8" width="1.48" height="1.48"/>
+    <rect class="st0" x="68.8" y="40.8" width="1.48" height="1.48"/>
+    <rect class="st0" x="62.89" y="46.72" width="1.48" height="1.48"/>
+    <rect class="st0" x="68.8" y="46.72" width="1.48" height="1.48"/>
+    <rect class="st0" x="67.68" y="45.61" width=".76" height=".76"/>
+    <rect class="st0" x="67.32" y="43.77" width="1.48" height="1.48"/>
+    <rect class="st0" x="65.84" y="43.77" width="1.48" height="1.48"/>
+    <rect class="st0" x="66.2" y="45.61" width=".76" height=".76"/>
+    <rect class="st0" x="64.36" y="42.29" width="1.48" height="1.48"/>
+    <rect class="st0" x="66.28" y="41.23" width=".62" height=".62"/>
+    <rect class="st0" x="66.2" y="47.08" width=".76" height=".76"/>
+  </g>
+</svg>

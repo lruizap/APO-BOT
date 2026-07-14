@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60.47 31.47">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+      }
+
+      .st1 {
+        fill: url(#Degradado_sin_nombre_2010);
+      }
+
+      .st2 {
+        fill: url(#Nueva_muestra_de_degradado_2);
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_2010" data-name="Degradado sin nombre 2010" x1="-87.96" y1="857.26" x2="-31.94" y2="857.26" gradientTransform="translate(-29.79 872.98) rotate(-180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1f2144"/>
+      <stop offset=".13" stop-color="#264a72"/>
+      <stop offset=".27" stop-color="#2d6f99"/>
+      <stop offset=".4" stop-color="#328bb9"/>
+      <stop offset=".53" stop-color="#36a0cf"/>
+      <stop offset=".65" stop-color="#38acdd"/>
+      <stop offset=".76" stop-color="#39b1e2"/>
+    </linearGradient>
+    <linearGradient id="Nueva_muestra_de_degradado_2" data-name="Nueva muestra de degradado 2" x1="2.27" y1="15.72" x2="29.52" y2="15.72" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d86467"/>
+      <stop offset="1" stop-color="#f6b683"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <path class="st1" d="M15.77,29.34c-7.51,0-13.62-6.11-13.62-13.62S8.26,2.1,15.77,2.1h28.78c7.51,0,13.62,6.11,13.62,13.62s-6.11,13.62-13.62,13.62H15.77Z"/>
+    <path class="st0" d="M44.55,3.24c6.88,0,12.48,5.6,12.48,12.48s-5.6,12.48-12.48,12.48H15.77c-6.88,0-12.48-5.6-12.48-12.48S8.89,3.24,15.77,3.24h28.78M44.55.97H15.77C7.62.97,1.02,7.57,1.02,15.72h0c0,8.15,6.61,14.76,14.76,14.76h28.78c8.15,0,14.76-6.61,14.76-14.76h0c0-8.15-6.61-14.76-14.76-14.76h0Z"/>
+  </g>
+  <g>
+    <path class="st2" d="M15.89,29.35c-7.51,0-13.63-6.11-13.63-13.63S8.38,2.1,15.89,2.1s13.63,6.11,13.63,13.63-6.11,13.63-13.63,13.63Z"/>
+    <path class="st0" d="M15.89,3.23c6.9,0,12.49,5.59,12.49,12.49s-5.59,12.49-12.49,12.49S3.4,22.62,3.4,15.72,9,3.23,15.89,3.23M15.89.96C7.75.96,1.13,7.58,1.13,15.72s6.62,14.76,14.76,14.76,14.76-6.62,14.76-14.76S24.03.96,15.89.96h0Z"/>
+  </g>
+</svg>

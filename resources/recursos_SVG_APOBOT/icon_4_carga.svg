@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 55 55">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+      }
+
+      .st1 {
+        fill: #e1806f;
+      }
+
+      .st2 {
+        stroke: #e1806f;
+      }
+
+      .st2, .st3 {
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
+      }
+
+      .st3 {
+        stroke: #3cb2dd;
+      }
+    </style>
+  </defs>
+  <line class="st2" x1="16.19" y1="27.23" x2="2.79" y2="27.23"/>
+  <path class="st2" d="M3.54,15.62c0-6.74,5.46-12.2,12.2-12.2h23.22c6.74,0,12.2,5.46,12.2,12.2v23.22c0,6.74-5.46,12.2-12.2,12.2H15.75c-6.74,0-12.2-5.46-12.2-12.2"/>
+  <line class="st3" x1="25.08" y1="39.1" x2="46.04" y2="39.1"/>
+  <line class="st3" x1="25.08" y1="23.9" x2="46.04" y2="23.9"/>
+  <rect class="st1" x="28.7" y="32.81" width="3.9" height="3.9"/>
+  <rect class="st0" x="35.86" y="32.81" width="7.58" height="3.9"/>
+  <rect class="st0" x="39.54" y="15.94" width="3.9" height="5.46" transform="translate(82.97 37.33) rotate(180)"/>
+  <rect class="st0" x="29.15" y="15.94" width="7.58" height="5.46" transform="translate(65.89 37.33) rotate(180)"/>
+  <polyline class="st2" points="12.6 22.57 17.37 27.34 12.81 31.89"/>
+</svg>

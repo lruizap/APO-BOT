@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 55 55">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #e1806f;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
+      }
+
+      .st1 {
+        fill: url(#Nueva_muestra_de_degradado_1);
+      }
+    </style>
+    <linearGradient id="Nueva_muestra_de_degradado_1" data-name="Nueva muestra de degradado 1" x1="12.92" y1="27.59" x2="41.79" y2="27.59" gradientUnits="userSpaceOnUse">
+      <stop offset=".27" stop-color="#39b1e2"/>
+      <stop offset="1" stop-color="#9bd4e6"/>
+    </linearGradient>
+  </defs>
+  <rect class="st0" x="3.54" y="3.77" width="47.62" height="47.62" rx="12.2" ry="12.2"/>
+  <path class="st1" d="M25.4,13.15h3.9v3.9h-3.9v-3.9ZM25.4,42.02h3.9v-3.9h-3.9v3.9ZM37.88,25.63v3.9h3.9v-3.9h-3.9ZM16.82,25.63h-3.9v3.9h3.9v-3.9ZM38.94,18.76l-2.76-2.76-2.76,2.76,2.76,2.76,2.76-2.76ZM15.77,36.41l2.76,2.76,2.76-2.76-2.76-2.76-2.76,2.76ZM33.42,36.41l2.76,2.76,2.76-2.76-2.76-2.76-2.76,2.76ZM15.77,18.76l2.76,2.76,2.76-2.76-2.76-2.76-2.76,2.76Z"/>
+</svg>
