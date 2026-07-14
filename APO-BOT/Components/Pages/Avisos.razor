@@ -12,8 +12,8 @@
             <p>@ActiveCount avisos activos</p>
         </div>
         <div class="view-switch" aria-label="Filtrar avisos">
-            <button class="@(!showResolved ? "selected" : "")" type="button" @onclick="() => SetFilter(false)">Activos</button>
-            <button class="@(showResolved ? "selected" : "")" type="button" @onclick="() => SetFilter(true)">Resueltos</button>
+            <MudButton Class="@FilterButtonClass(false)" Variant="Variant.Outlined" OnClick="() => SetFilter(false)">Activos</MudButton>
+            <MudButton Class="@FilterButtonClass(true)" Variant="Variant.Outlined" OnClick="() => SetFilter(true)">Resueltos</MudButton>
         </div>
     </header>
 
@@ -22,7 +22,7 @@
         {
             @foreach (var alert in VisibleAlerts)
             {
-                <article class="alert-row @(alert.Resolved ? "alert-row-resolved" : "")">
+                <MudPaper Class="@AlertRowClass(alert)" Elevation="0">
                     <span class="alert-severity alert-severity-@NormalizeSeverity(alert.Severity)" aria-hidden="true">!</span>
                     <div class="alert-copy">
                         <h2>@alert.Message</h2>
@@ -31,22 +31,22 @@
                     <time datetime="@alert.CreatedAt.ToString("O")">@alert.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm") H</time>
                     @if (!alert.Resolved)
                     {
-                        <button class="alert-resolve" type="button" disabled="@actionPending" @onclick="() => ResolveAsync(alert.Id)">
+                        <MudButton Class="alert-resolve" Variant="Variant.Filled" Color="Color.Primary" Disabled="@actionPending" OnClick="() => ResolveAsync(alert.Id)">
                             Marcar resuelto
-                        </button>
+                        </MudButton>
                     }
                     else
                     {
                         <span class="alert-status">Resuelto</span>
                     }
-                </article>
+                </MudPaper>
             }
         }
         else
         {
-            <div class="panel alerts-empty">
+            <MudPaper Class="panel alerts-empty" Elevation="0">
                 <BackendState Loading="loading" Error="@error" Title="Sin avisos" Detail="No hay avisos en esta vista." />
-            </div>
+            </MudPaper>
         }
     </section>
 </div>
@@ -60,6 +60,8 @@
 
     private int ActiveCount => alerts.Count(alert => !alert.Resolved);
     private IReadOnlyList<AlertDto> VisibleAlerts => alerts.Where(alert => alert.Resolved == showResolved).ToArray();
+    private string FilterButtonClass(bool resolved) => showResolved == resolved ? "selected" : string.Empty;
+    private static string AlertRowClass(AlertDto alert) => $"alert-row {(alert.Resolved ? "alert-row-resolved" : string.Empty)}";
 
     protected override async Task OnInitializedAsync() => await LoadAsync();
 

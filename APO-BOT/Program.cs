@@ -2,12 +2,14 @@ using APO_BOT.Components;
 using APO_BOT.Infrastructure.Api;
 using APO_BOT.Services;
 using Microsoft.Extensions.Options;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddMudServices();
 
 builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection(ApiOptions.SectionName));
 builder.Services.AddSingleton<IApiAccessTokenProvider, EmptyApiAccessTokenProvider>();

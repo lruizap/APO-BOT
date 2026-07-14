@@ -5,21 +5,21 @@
 
 <div class="load-screen">
     <aside class="load-controls">
-        <input placeholder="Albaran" aria-label="Albaran" @bind="deliveryNote" />
-        <input placeholder="Proveedor" aria-label="Proveedor" @bind="supplier" />
-        <input placeholder="Codigo albaran" aria-label="Codigo albaran" @bind="deliveryNoteCode" />
+        <MudTextField T="string" Label="Albaran" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="deliveryNote" />
+        <MudTextField T="string" Label="Proveedor" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="supplier" />
+        <MudTextField T="string" Label="Codigo albaran" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="deliveryNoteCode" />
 
         <div class="load-action-buttons">
-            <button class="button-start" type="button" disabled="@(!CanStart)" @onclick="StartLoadAsync">Iniciar</button>
-            <button class="button-pause" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.Pause)">Pausar</button>
-            <button class="button-stop" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.Stop)">Detener</button>
+            <MudButton Class="button-start" Variant="Variant.Filled" Color="Color.Success" Disabled="@(!CanStart)" OnClick="StartLoadAsync">Iniciar</MudButton>
+            <MudButton Class="button-pause" Variant="Variant.Filled" Color="Color.Warning" Disabled="@(!CanCommand)" OnClick="() => SendCommandAsync(LoadCommand.Pause)">Pausar</MudButton>
+            <MudButton Class="button-stop" Variant="Variant.Filled" Color="Color.Error" Disabled="@(!CanCommand)" OnClick="() => SendCommandAsync(LoadCommand.Stop)">Detener</MudButton>
         </div>
 
         <fieldset class="panel load-window-selector" disabled="@configurationLoading">
             <legend><span>Seleccion</span> Ventana de carga</legend>
             @foreach (var window in configuration.Windows)
             {
-                <button class="@(selectedWindowId == window.Id ? "selected" : "")" type="button" disabled="@(!window.Available)" @onclick="() => selectedWindowId = window.Id">@window.Name</button>
+                <MudButton Class="@WindowButtonClass(window.Id)" Variant="Variant.Outlined" Disabled="@(!window.Available)" OnClick="() => selectedWindowId = window.Id">@window.Name</MudButton>
             }
             @if (configuration.Windows.Count == 0)
             {
@@ -33,7 +33,7 @@
             <div>
                 @foreach (var shelf in configuration.Shelves)
                 {
-                    <button class="@(selectedShelfId == shelf.Id ? "selected" : "")" type="button" disabled="@(!shelf.Available)" @onclick="() => selectedShelfId = shelf.Id">@shelf.Name</button>
+                    <MudButton Class="@ShelfButtonClass(shelf.Id)" Variant="Variant.Outlined" Disabled="@(!shelf.Available)" OnClick="() => selectedShelfId = shelf.Id">@shelf.Name</MudButton>
                 }
             </div>
             @if (configuration.Shelves.Count == 0)
@@ -44,7 +44,7 @@
     </aside>
 
     <section class="load-tables">
-        <article class="panel load-table-panel">
+        <MudPaper Class="panel load-table-panel" Elevation="0">
             <div class="data-table-wrap">
                 <table class="data-table placeholder-table">
                     <thead><tr><th>Id</th><th>Codigo</th><th>Descripcion</th><th>Modulo</th><th>Balda</th><th>Pos. X</th><th>Pos. Y</th><th>F. caducidad</th><th>Lote</th><th>N. serie</th><th>Estado</th></tr></thead>
@@ -61,13 +61,13 @@
                 }
             </div>
             <div class="load-table-actions">
-                <button class="button-start" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.StartShelf)">Iniciar carga balda</button>
-                <button class="button-pause" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.PauseShelf)">Pausar carga balda</button>
-                <button class="button-stop" type="button" disabled="@(!CanCommand)" @onclick="() => SendCommandAsync(LoadCommand.StopShelf)">Detener carga balda</button>
+                <MudButton Class="button-start" Variant="Variant.Filled" Color="Color.Success" Disabled="@(!CanCommand)" OnClick="() => SendCommandAsync(LoadCommand.StartShelf)">Iniciar carga balda</MudButton>
+                <MudButton Class="button-pause" Variant="Variant.Filled" Color="Color.Warning" Disabled="@(!CanCommand)" OnClick="() => SendCommandAsync(LoadCommand.PauseShelf)">Pausar carga balda</MudButton>
+                <MudButton Class="button-stop" Variant="Variant.Filled" Color="Color.Error" Disabled="@(!CanCommand)" OnClick="() => SendCommandAsync(LoadCommand.StopShelf)">Detener carga balda</MudButton>
             </div>
-        </article>
+        </MudPaper>
 
-        <article class="panel load-table-panel rejected-table-panel">
+        <MudPaper Class="panel load-table-panel rejected-table-panel" Elevation="0">
             <div class="data-table-wrap">
                 <table class="data-table placeholder-table">
                     <thead><tr><th>Id</th><th>Codigo</th><th>Descripcion</th><th>Modulo</th><th>Balda</th><th>Pos. X</th><th>Pos. Y</th><th>F. caducidad</th><th>Lote</th><th>N. serie</th><th>Causa rechazo</th></tr></thead>
@@ -83,7 +83,7 @@
                     <BackendState Loading="sessionLoading" Error="@error" Compact="true" Title="Sin rechazos" Detail="No hay envases rechazados en la sesion activa." />
                 }
             </div>
-        </article>
+        </MudPaper>
     </section>
 </div>
 
@@ -107,6 +107,8 @@
         && !string.IsNullOrWhiteSpace(selectedWindowId)
         && !string.IsNullOrWhiteSpace(selectedShelfId);
     private bool CanCommand => session is not null && !commandPending;
+    private string WindowButtonClass(string id) => selectedWindowId == id ? "selected" : string.Empty;
+    private string ShelfButtonClass(string id) => selectedShelfId == id ? "selected" : string.Empty;
 
     protected override async Task OnInitializedAsync()
     {

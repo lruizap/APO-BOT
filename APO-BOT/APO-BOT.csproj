@@ -7,13 +7,11 @@
     <RootNamespace>APO_BOT</RootNamespace>
     <AssemblyName>$(AssemblyName.Replace(' ', '_'))</AssemblyName>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <UseAppHost>false</UseAppHost>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="node_modules\**" />
-    <Content Remove="package.json" />
-    <Content Remove="package-lock.json" />
-    <Content Remove="Styles\**" />
+    <PackageReference Include="MudBlazor" Version="9.7.0" />
   </ItemGroup>
 
 </Project>

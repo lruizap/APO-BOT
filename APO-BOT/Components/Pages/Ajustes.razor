@@ -16,58 +16,47 @@
     @if (preferences is not null)
     {
         <EditForm Model="preferences" OnValidSubmit="SaveAsync" class="settings-form">
-            <section class="panel settings-panel settings-identity">
+            <MudPaper Class="panel settings-panel settings-identity" Elevation="0">
                 <h2>Identificacion</h2>
-                <label>
-                    <span>Farmacia</span>
-                    <InputText @bind-Value="preferences.PharmacyName" />
-                </label>
-                <label>
-                    <span>Usuario mostrado</span>
-                    <InputText @bind-Value="preferences.UserDisplayName" />
-                </label>
-            </section>
+                <MudTextField T="string" Label="Farmacia" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="preferences.PharmacyName" />
+                <MudTextField T="string" Label="Usuario mostrado" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="preferences.UserDisplayName" />
+            </MudPaper>
 
-            <section class="panel settings-panel">
+            <MudPaper Class="panel settings-panel" Elevation="0">
                 <h2>Pantalla</h2>
-                <label class="range-setting">
+                <div class="range-setting">
                     <span>Brillo <strong>@preferences.ScreenBrightness%</strong></span>
-                    <input type="range" min="20" max="100" step="5" @bind="preferences.ScreenBrightness" />
-                </label>
-                <label>
-                    <span>Actualizacion de datos</span>
-                    <select @bind="preferences.RefreshIntervalSeconds">
-                        <option value="15">Cada 15 segundos</option>
-                        <option value="30">Cada 30 segundos</option>
-                        <option value="60">Cada minuto</option>
-                        <option value="300">Cada 5 minutos</option>
-                    </select>
-                </label>
-            </section>
+                    <MudSlider T="int" Min="20" Max="100" Step="5" Color="Color.Primary" @bind-Value="preferences.ScreenBrightness" />
+                </div>
+                <MudSelect T="int" Label="Actualizacion de datos" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="preferences.RefreshIntervalSeconds">
+                    <MudSelectItem T="int" Value="15">Cada 15 segundos</MudSelectItem>
+                    <MudSelectItem T="int" Value="30">Cada 30 segundos</MudSelectItem>
+                    <MudSelectItem T="int" Value="60">Cada minuto</MudSelectItem>
+                    <MudSelectItem T="int" Value="300">Cada 5 minutos</MudSelectItem>
+                </MudSelect>
+            </MudPaper>
 
-            <section class="panel settings-panel settings-notifications">
+            <MudPaper Class="panel settings-panel settings-notifications" Elevation="0">
                 <div>
                     <h2>Avisos sonoros</h2>
                     <p>Reproducir una señal cuando el sistema reciba un aviso.</p>
                 </div>
-                <label class="switch-control">
-                    <input type="checkbox" @bind="preferences.AlertSoundEnabled" />
-                    <span aria-hidden="true"></span>
-                    <b>@(preferences.AlertSoundEnabled ? "Activados" : "Desactivados")</b>
-                </label>
-            </section>
+                <MudSwitch T="bool" Class="switch-control" Color="Color.Primary" @bind-Value="preferences.AlertSoundEnabled">
+                    @(preferences.AlertSoundEnabled ? "Activados" : "Desactivados")
+                </MudSwitch>
+            </MudPaper>
 
             <footer class="settings-actions">
                 <p class="settings-message" role="status">@message</p>
-                <button type="submit" disabled="@saving">@(saving ? "Guardando" : "Guardar ajustes")</button>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@saving" StartIcon="@Icons.Material.Rounded.Save">@(saving ? "Guardando" : "Guardar ajustes")</MudButton>
             </footer>
         </EditForm>
     }
     else
     {
-        <div class="panel settings-loading">
+        <MudPaper Class="panel settings-loading" Elevation="0">
             <BackendState Loading="loading" Error="@error" Title="Ajustes no disponibles" Detail="No se ha podido obtener la configuracion del backend." />
-        </div>
+        </MudPaper>
     }
 </div>
 

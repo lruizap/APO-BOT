@@ -1,6 +1,6 @@
 # APObot Frontend
 
-Interfaz responsive del display APObot para farmacia, desarrollada con Blazor y Tailwind CSS a partir de las pantallas, colores, iconos y tipografias incluidas en `resources`.
+Interfaz responsive del display APObot para farmacia, desarrollada con Blazor y MudBlazor a partir de las pantallas, colores, iconos y tipografias incluidas en `resources`.
 
 El producto principal de este repositorio es el frontend. `demo/APO-BOT.DemoApi` proporciona una API local con SQLite para probar la interfaz de extremo a extremo; no sustituye al backend de produccion.
 
@@ -19,7 +19,7 @@ El producto principal de este repositorio es el frontend. `demo/APO-BOT.DemoApi`
 
 - .NET 10 y Blazor Web App con renderizado interactivo de servidor.
 - C# y Razor Components.
-- Tailwind CSS 4.
+- MudBlazor 9 con tema visual APObot.
 - SQLite con Entity Framework Core en el entorno demo.
 - Montserrat y recursos graficos oficiales de APObot.
 
@@ -27,7 +27,6 @@ El producto principal de este repositorio es el frontend. `demo/APO-BOT.DemoApi`
 
 - Git.
 - [.NET SDK 10](https://dotnet.microsoft.com/download/dotnet/10.0).
-- Node.js 20 o posterior y npm.
 - Windows 10/11 para ejecutar los scripts incluidos sin adaptaciones.
 
 Comprueba las instalaciones:
@@ -35,8 +34,6 @@ Comprueba las instalaciones:
 ```powershell
 git --version
 dotnet --version
-node --version
-npm --version
 ```
 
 ## Descargar y probar el proyecto completo
@@ -48,11 +45,11 @@ git clone https://github.com/lruizap/APO-BOT.git
 cd APO-BOT
 ```
 
-2. Instala Tailwind y genera el CSS:
+2. Restaura las dependencias .NET:
 
 ```powershell
-npm ci --prefix .\APO-BOT
-npm run css:build --prefix .\APO-BOT
+dotnet restore .\APO-BOT\APO-BOT.csproj
+dotnet restore .\demo\APO-BOT.DemoApi\APO-BOT.DemoApi.csproj
 ```
 
 3. Crea desde cero la base SQLite con todos los datos de prueba:
@@ -119,16 +116,11 @@ La configuracion local apunta a `http://localhost:5090`. Para integrar otro back
 
 ## Desarrollo de estilos
 
-Modo observacion:
-
-```powershell
-npm run css:watch --prefix .\APO-BOT
-```
+El tema MudBlazor y los tokens de color estan centralizados en `APO-BOT/Theme/ApoBotTheme.cs`. El layout responsive y los acabados especificos del display se encuentran en `APO-BOT/wwwroot/app.css`; no existe un paso de compilacion CSS ni una dependencia de Node.js.
 
 Antes de entregar cambios:
 
 ```powershell
-npm run css:build --prefix .\APO-BOT
 dotnet build .\APO-BOT\APO-BOT.csproj
 dotnet build .\demo\APO-BOT.DemoApi\APO-BOT.DemoApi.csproj
 ```
@@ -153,8 +145,8 @@ APO-BOT/
 |   |-- Components/             # Layout, paginas y componentes
 |   |-- Infrastructure/Api/     # Cliente HTTP y configuracion
 |   |-- Models/                 # Contratos del backend
-|   |-- Styles/                 # Fuente de Tailwind
-|   `-- wwwroot/                # CSS, fuentes e imagenes oficiales
+|   |-- Theme/                  # Tema y paleta MudBlazor de APObot
+|   `-- wwwroot/                # CSS responsive, fuentes e imagenes oficiales
 |-- demo/APO-BOT.DemoApi/       # API local y persistencia SQLite
 |-- docs/backend-integration.md # Contrato de integracion
 |-- resources/                  # Documentacion grafica original

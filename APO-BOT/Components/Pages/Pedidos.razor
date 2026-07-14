@@ -5,15 +5,15 @@
 <PageTitle>Pedidos - APObot</PageTitle>
 
 <div class="orders-screen">
-    <section class="order-summary">
+    <MudPaper Class="order-summary" Elevation="0">
         <div><span>Id pedido</span><strong>@(order?.Id ?? "--")</strong></div>
         <div><span>Solicitado por</span><strong>@(order?.RequestedBy ?? "--")<small>@(order?.Organization ?? "--")</small></strong></div>
         <div><span>Salida</span><strong>@(order?.OutputName ?? "--")</strong></div>
         <div><span>Estado</span><strong class="status-preparing">@(order?.Status ?? "--")</strong></div>
-    </section>
+    </MudPaper>
 
     <section class="orders-columns">
-        <article class="panel order-panel">
+        <MudPaper Class="panel order-panel" Elevation="0">
             <h1>Listado restante del pedido @if (order is not null) { <strong>#@order.Id</strong> }</h1>
             <div class="order-products">
                 @if (RemainingLines.Count > 0)
@@ -28,9 +28,9 @@
                     <BackendState Loading="loading" Error="@error" Title="Sin lineas pendientes" Detail="No existe un pedido activo o todas sus lineas estan completadas." />
                 }
             </div>
-        </article>
+        </MudPaper>
 
-        <article class="panel order-panel completed-order-panel">
+        <MudPaper Class="panel order-panel completed-order-panel" Elevation="0">
             <h2>Listado completado del pedido</h2>
             <div class="order-products">
                 @if (CompletedLines.Count > 0)
@@ -47,9 +47,9 @@
             </div>
             @if (order is not null && RemainingLines.Count == 0 && order.Lines.Count > 0)
             {
-                <span class="completed-label">Completado</span>
+                <MudChip T="string" Class="completed-label" Color="Color.Success" Variant="Variant.Filled">Completado</MudChip>
             }
-        </article>
+        </MudPaper>
     </section>
 </div>
 
