@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 60.47 31.47">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#Degradado_sin_nombre_26);
+      }
+
+      .st1 {
+        fill: #fff;
+      }
+
+      .st2 {
+        fill: url(#Degradado_sin_nombre_106);
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_26" data-name="Degradado sin nombre 26" x1="-87.96" y1="857.26" x2="-31.94" y2="857.26" gradientTransform="translate(-29.79 872.98) rotate(-180)" gradientUnits="userSpaceOnUse">
+      <stop offset=".14" stop-color="#1f2144"/>
+      <stop offset=".33" stop-color="#274d75"/>
+      <stop offset=".58" stop-color="#3083af"/>
+      <stop offset=".76" stop-color="#36a4d4"/>
+      <stop offset=".85" stop-color="#39b1e2"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_106" data-name="Degradado sin nombre 106" x1="31.66" y1="15.72" x2="58.63" y2="15.72" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#509040"/>
+      <stop offset="1" stop-color="#6fb971"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <path class="st0" d="M15.77,29.34c-7.51,0-13.62-6.11-13.62-13.62S8.26,2.1,15.77,2.1h28.78c7.51,0,13.62,6.11,13.62,13.62s-6.11,13.62-13.62,13.62H15.77Z"/>
+    <path class="st1" d="M44.55,3.24c6.88,0,12.48,5.6,12.48,12.48s-5.6,12.48-12.48,12.48H15.77c-6.88,0-12.48-5.6-12.48-12.48S8.89,3.24,15.77,3.24h28.78M44.55.97H15.77C7.62.97,1.02,7.57,1.02,15.72h0c0,8.15,6.61,14.76,14.76,14.76h28.78c8.15,0,14.76-6.61,14.76-14.76h0c0-8.15-6.61-14.76-14.76-14.76h0Z"/>
+  </g>
+  <g>
+    <path class="st2" d="M45.15,29.21c-7.44,0-13.49-6.05-13.49-13.49s6.05-13.49,13.49-13.49,13.49,6.05,13.49,13.49-6.05,13.49-13.49,13.49Z"/>
+    <path class="st1" d="M45.15,3.37c6.82,0,12.35,5.53,12.35,12.35s-5.53,12.35-12.35,12.35-12.35-5.53-12.35-12.35,5.53-12.35,12.35-12.35M45.15,1.1c-8.06,0-14.62,6.56-14.62,14.62s6.56,14.62,14.62,14.62,14.62-6.56,14.62-14.62S53.21,1.1,45.15,1.1h0Z"/>
+  </g>
+</svg>

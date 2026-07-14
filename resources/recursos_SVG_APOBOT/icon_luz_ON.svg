@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 195 70">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        font-family: Montserrat-Regular, Montserrat;
+        font-size: 14.68px;
+      }
+
+      .st0, .st1, .st2 {
+        fill: #fff;
+      }
+
+      .st3 {
+        fill: url(#Degradado_sin_nombre_260);
+      }
+
+      .st1 {
+        filter: url(#drop-shadow-1);
+      }
+
+      .st2 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 31.63px;
+        font-weight: 700;
+      }
+
+      .st4 {
+        fill: url(#Nueva_muestra_de_degradado_1);
+      }
+    </style>
+    <linearGradient id="Nueva_muestra_de_degradado_1" data-name="Nueva muestra de degradado 1" x1=".73" y1="35" x2="194.27" y2="35" gradientUnits="userSpaceOnUse">
+      <stop offset=".27" stop-color="#39b1e2"/>
+      <stop offset="1" stop-color="#9bd4e6"/>
+    </linearGradient>
+    <filter id="drop-shadow-1" x="4.1" y="6.02" width="63.84" height="63.84" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="3"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood flood-color="#2f5b9b" flood-opacity=".5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="Degradado_sin_nombre_260" data-name="Degradado sin nombre 260" x1="35.96" y1="56.49" x2="35.96" y2="13.51" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d86467"/>
+      <stop offset="1" stop-color="#f6b683"/>
+    </linearGradient>
+  </defs>
+  <rect class="st4" x=".73" y=".05" width="193.53" height="69.9" rx="34.95" ry="34.95"/>
+  <g>
+    <circle class="st1" cx="35.96" cy="35" r="25.8"/>
+    <path class="st3" d="M26.77,41.88c.36.36.36.95,0,1.31l-3.05,3.05c-.17.17-.41.27-.66.27s-.48-.1-.65-.27c-.36-.37-.36-.95,0-1.31l3.05-3.05c.36-.36.95-.36,1.31,0ZM38.53,53.68c-.21-.13-.46-.17-.7-.11l-4.43,1.09c-.24.06-.44.21-.57.42s-.17.46-.11.7c.1.42.47.71.9.71.07,0,.14,0,.22-.03l4.43-1.09c.24-.06.45-.21.57-.42.13-.21.17-.46.11-.7-.06-.24-.21-.45-.42-.57ZM25.45,23.49c.17.17.41.27.66.27s.48-.1.66-.27c.36-.36.36-.95,0-1.31l-3.05-3.05c-.35-.35-.97-.35-1.31,0-.36.36-.36.95,0,1.31l3.05,3.05ZM22.96,32.68c0-.51-.42-.93-.93-.93h-4.31c-.51,0-.93.42-.93.93s.42.93.93.93h4.31c.51,0,.93-.42.93-.93ZM35.96,19.68c.51,0,.93-.42.93-.93v-4.31c0-.51-.42-.93-.93-.93s-.93.42-.93.93v4.31c0,.51.42.93.93.93ZM43.35,24.79h0c-2.38-2.13-5.45-3.1-8.66-2.75-5.24.58-9.36,4.83-9.78,10.1-.26,3.18.86,6.32,3.06,8.61,1.24,1.28,1.92,2.95,1.92,4.7,0,.51.42.93.93.93s.93-.42.93-.93c0-2.23-.86-4.36-2.43-5.99-1.83-1.9-2.76-4.52-2.55-7.17.35-4.31,3.85-7.93,8.14-8.41,2.67-.3,5.23.52,7.21,2.29,1.96,1.75,3.08,4.26,3.08,6.89,0,2.45-.95,4.76-2.68,6.5-1.6,1.62-2.53,3.65-2.64,5.78l-9.28,2.29c-.24.06-.44.21-.57.42s-.17.46-.11.7c.1.42.47.71.9.71.08,0,.15,0,.22-.03l9.97-2.46c.42-.1.71-.47.71-.9v-.29c0-1.79.75-3.53,2.12-4.91,2.07-2.09,3.21-4.86,3.21-7.81,0-3.15-1.35-6.17-3.7-8.27ZM45.81,23.76c.25,0,.48-.1.66-.27l3.05-3.05c.18-.18.27-.41.27-.66s-.1-.48-.27-.65c-.17-.18-.41-.27-.66-.27h0c-.25,0-.48.1-.66.27l-3.05,3.05c-.36.36-.36.95,0,1.31.17.17.41.27.66.27ZM54.2,31.76h-4.31c-.51,0-.93.42-.93.93s.42.93.93.93h4.31c.51,0,.93-.42.93-.93s-.42-.93-.93-.93ZM40.84,48.19c-.21-.13-.46-.17-.7-.11l-9.04,2.22c-.24.06-.44.21-.57.42-.13.21-.17.46-.11.7.1.42.47.71.9.71.07,0,.14,0,.22-.03l9.04-2.22c.24-.06.45-.21.57-.42.13-.21.17-.46.11-.7-.06-.24-.21-.45-.42-.57ZM46.47,41.88c-.36-.36-.95-.36-1.31,0s-.36.95,0,1.31l3.05,3.05c.18.17.41.27.65.27s.48-.1.66-.27.27-.41.27-.66-.1-.48-.27-.65l-3.05-3.05ZM38.86,50.86l-6.49,1.59c-.5.12-.8.63-.68,1.12.1.42.47.71.9.71.08,0,.15,0,.22-.03l6.48-1.59c.24-.06.45-.21.58-.42s.17-.46.11-.7c-.12-.5-.63-.8-1.12-.68Z"/>
+  </g>
+  <text class="st0" transform="translate(81.92 39.15)"><tspan x="0" y="0">LUZ</tspan></text>
+  <text class="st2" transform="translate(120.4 45.06)"><tspan x="0" y="0">ON</tspan></text>
+</svg>

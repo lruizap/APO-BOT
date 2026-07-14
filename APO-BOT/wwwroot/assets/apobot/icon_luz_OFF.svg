@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 195 70">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#Degradado_sin_nombre_1998);
+      }
+
+      .st1 {
+        fill: url(#Degradado_sin_nombre_260);
+      }
+
+      .st2 {
+        fill: #fff;
+        filter: url(#drop-shadow-1);
+      }
+
+      .st3 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 31.63px;
+        font-weight: 700;
+      }
+
+      .st3, .st4 {
+        fill: #45718f;
+      }
+
+      .st4 {
+        font-family: Montserrat-Regular, Montserrat;
+        font-size: 14.68px;
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_1998" data-name="Degradado sin nombre 1998" x1=".73" y1="35" x2="194.27" y2="35" gradientTransform="translate(195 70) rotate(180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14112f"/>
+      <stop offset=".27" stop-color="#141432"/>
+      <stop offset=".51" stop-color="#171f3c"/>
+      <stop offset=".74" stop-color="#1c314d"/>
+      <stop offset=".96" stop-color="#234b65"/>
+      <stop offset="1" stop-color="#25516b"/>
+    </linearGradient>
+    <filter id="drop-shadow-1" x="127.22" y="6.15" width="63.84" height="63.84" filterUnits="userSpaceOnUse">
+      <feOffset dx="0" dy="3"/>
+      <feGaussianBlur result="blur" stdDeviation="2"/>
+      <feFlood flood-color="#2f5b9b" flood-opacity=".5"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="Degradado_sin_nombre_260" data-name="Degradado sin nombre 260" x1="159.04" y1="56.5" x2="159.04" y2="17.52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d86467"/>
+      <stop offset="1" stop-color="#f6b683"/>
+    </linearGradient>
+  </defs>
+  <rect class="st0" x=".73" y=".05" width="193.53" height="69.9" rx="34.95" ry="34.95" transform="translate(195 70) rotate(-180)"/>
+  <g>
+    <circle class="st2" cx="159.04" cy="35" r="25.8"/>
+    <path class="st1" d="M149.85,41.89c.17.17.27.41.27.66s-.1.48-.27.66l-.51.51c-.17.17-.41.27-.66.27s-.48-.1-.66-.27c-.36-.36-.36-.95,0-1.31l.51-.51c.35-.35.96-.35,1.31,0ZM145.11,31.77h-.31c-.51,0-.93.42-.93.93s.42.93.93.93h.31c.51,0,.93-.42.93-.93s-.42-.93-.93-.93ZM168.89,23.77c.25,0,.48-.1.66-.27l.31-.31c.36-.36.36-.95,0-1.31-.36-.36-.95-.36-1.31,0l-.31.31c-.17.17-.27.41-.27.66s.1.48.27.65c.17.18.41.27.66.27ZM159.04,19.69c.51,0,.93-.42.93-.93v-.31c0-.51-.42-.93-.93-.93s-.93.42-.93.93v.31c0,.51.42.93.93.93ZM148.53,23.5c.17.17.41.27.66.27s.48-.1.66-.27c.18-.17.27-.41.27-.66s-.1-.48-.27-.66l-.2-.2c-.18-.18-.41-.27-.66-.27h0c-.25,0-.48.1-.65.27-.18.17-.27.41-.27.66s.1.48.27.66l.2.2ZM161.94,50.87l-6.48,1.59c-.24.06-.45.21-.57.42-.13.21-.17.46-.11.7.1.42.47.71.9.71.08,0,.15,0,.22-.03l6.48-1.59c.24-.06.44-.21.57-.42s.17-.46.11-.7c-.12-.49-.62-.8-1.12-.68ZM160.91,53.58l-4.43,1.09c-.24.06-.44.21-.57.42-.13.21-.17.46-.11.7.1.42.47.71.9.71.08,0,.15,0,.22-.03l4.43-1.09c.24-.06.44-.21.57-.42s.17-.46.11-.7c-.12-.5-.63-.8-1.12-.68ZM173.28,31.77h-.31c-.51,0-.93.42-.93.93s.42.93.93.93h.31c.51,0,.93-.42.93-.93s-.42-.93-.93-.93ZM169.55,41.89c-.18-.18-.41-.27-.66-.27h0c-.25,0-.48.1-.66.27-.36.36-.36.95,0,1.31l.32.32c.17.18.41.27.66.27s.48-.1.66-.27c.36-.36.36-.95,0-1.31l-.32-.32ZM163.92,48.2c-.21-.13-.46-.17-.7-.11l-9.04,2.22c-.24.06-.44.21-.57.42s-.17.46-.11.71c.1.42.47.71.9.71.08,0,.15,0,.22-.03l9.04-2.22c.24-.06.44-.21.57-.42.13-.21.17-.46.11-.7-.06-.24-.21-.44-.42-.57ZM166.43,24.8c-2.38-2.13-5.44-3.11-8.66-2.75-5.24.58-9.36,4.83-9.78,10.1-.26,3.18.86,6.32,3.06,8.61,1.24,1.28,1.92,2.95,1.92,4.7,0,.51.42.93.93.93s.93-.42.93-.93c0-2.23-.86-4.36-2.43-5.99-1.83-1.9-2.76-4.52-2.55-7.17.35-4.31,3.85-7.93,8.14-8.41,2.67-.3,5.23.52,7.21,2.29,1.96,1.75,3.08,4.26,3.08,6.89,0,2.45-.95,4.76-2.67,6.5-1.6,1.61-2.53,3.65-2.64,5.78l-9.28,2.29c-.24.06-.45.21-.57.42-.13.21-.17.46-.11.7.1.42.47.7.9.7.07,0,.14,0,.22-.03l9.97-2.46c.42-.1.71-.47.71-.9v-.29c0-1.79.75-3.53,2.12-4.91,2.07-2.09,3.21-4.86,3.21-7.81,0-3.15-1.35-6.17-3.7-8.27Z"/>
+  </g>
+  <text class="st4" transform="translate(19.05 39.42)"><tspan x="0" y="0">LUZ</tspan></text>
+  <text class="st3" transform="translate(55.15 45.33)"><tspan x="0" y="0">OFF</tspan></text>
+</svg>

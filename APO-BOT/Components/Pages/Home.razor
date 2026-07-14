@@ -1,7 +1,127 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>APObot - Display farmacia</PageTitle>
 
-<h1>Hello, world!</h1>
+<main class="min-h-screen bg-apobot-gray text-apobot-navy">
+    <section class="mx-auto flex min-h-screen max-w-[1920px] bg-apobot-gray">
+        <div class="flex min-w-0 flex-1 flex-col">
+            <header class="flex h-12 shrink-0 items-center justify-between bg-apobot-cyan px-5 text-[11px] font-semibold uppercase text-white">
+                <div class="flex items-center gap-8">
+                    <button class="grid size-8 place-items-center" aria-label="Abrir menu">
+                        <img class="size-5" src="/assets/apobot/icon_menu.svg" alt="" />
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <img class="size-5" src="/assets/apobot/icon_farmacia.svg" alt="" />
+                        <span>Farmacia Zaragoza</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <img class="size-5" src="/assets/apobot/icon_usuario.svg" alt="" />
+                        <span>Nombre farmaceutico/a</span>
+                    </div>
+                </div>
+                <time class="text-[10px] font-medium tracking-normal">14/02/2026&nbsp;&nbsp;10:42 H</time>
+            </header>
 
-Welcome to your new app.
+            <div class="grid flex-1 grid-cols-[1.03fr_1fr] gap-4 p-5 pr-4">
+                <section class="grid min-h-0 grid-rows-[1fr_1.1fr] gap-4">
+                    <article class="rounded-lg bg-gradient-to-r from-apobot-coral-dark to-apobot-coral-soft p-6 text-white shadow-sm">
+                        <div class="flex h-full justify-between gap-6">
+                            <div class="min-w-0">
+                                <h1 class="text-[20px] font-bold leading-tight">Capacidad<br />de almacenamiento</h1>
+                                <div class="mt-5 inline-flex rounded-full bg-white/85 px-6 py-2 text-[12px] font-bold uppercase text-apobot-coral-dark">
+                                    Alto limitado
+                                </div>
+                                <ul class="mt-6 space-y-2 text-[12px] font-semibold leading-tight">
+                                    <li>1 ud. Serc 16 MG 30 COMP</li>
+                                    <li>4 uds. Durogesic Matrix 100 5 parches</li>
+                                    <li>2 uds. Ibuhexal Akut 40 MG</li>
+                                    <li>6 uds. Synofen Ibuprofeno 40 MG</li>
+                                </ul>
+                            </div>
+                            <div class="flex w-44 flex-col items-center justify-center">
+                                <div class="grid size-36 place-items-center rounded-full border-[12px] border-white/75 bg-white/10 text-[42px] font-bold leading-none">
+                                    92%
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="overflow-hidden rounded-lg bg-white p-3 shadow-sm">
+                        <div class="grid h-full grid-cols-2 grid-rows-2 gap-2">
+                            <div class="camera-tile"><span>24</span></div>
+                            <div class="camera-tile"><span>23</span></div>
+                            <div class="camera-tile"><span>22</span></div>
+                            <div class="camera-tile"><span>21</span></div>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="grid min-h-0 grid-rows-[1fr_auto_auto] gap-4">
+                    <article class="rounded-lg bg-white p-5 shadow-sm">
+                        <div class="mb-4 flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div>
+                                <p class="text-[12px] font-bold uppercase text-apobot-cyan">Ultimas</p>
+                                <h2 class="text-[20px] font-bold uppercase">Salidas</h2>
+                            </div>
+                            <button class="rounded-full bg-apobot-cyan/15 px-4 py-2 text-[11px] font-bold uppercase text-apobot-cyan">Ver salidas</button>
+                        </div>
+                        <div class="space-y-2 text-[12px] font-semibold">
+                            <div class="activity-row"><span>2 uds. Durogesic Matrix 100 5 parches</span><time>12:45 H</time></div>
+                            <div class="activity-row"><span>1 ud. Ibuhexal Akut 40 MG</span><time>12:37 H</time></div>
+                            <div class="activity-row"><span>1 ud. Serc 16 MG 30 COMP</span><time>12:22 H</time></div>
+                            <div class="activity-row"><span>1 ud. Synofen Ibuprofeno 40 MG</span><time>12:08 H</time></div>
+                            <div class="activity-row"><span>2 uds. Durogesic Matrix 100 5 parches</span><time>11:57 H</time></div>
+                            <div class="activity-row"><span>1 ud. Serc 16 MG 30 COMP</span><time>11:46 H</time></div>
+                        </div>
+                    </article>
+
+                    <article class="rounded-lg bg-apobot-cyan p-4 text-white shadow-sm">
+                        <div class="grid grid-cols-[88px_1fr] gap-4">
+                            <div class="flex items-center justify-center gap-2 rounded-lg bg-white/15 p-3">
+                                <span class="text-3xl font-bold">7</span>
+                                <span class="text-[11px] font-bold uppercase leading-none">Avisos</span>
+                            </div>
+                            <ul class="space-y-2 text-[12px] font-semibold">
+                                <li>Dispensacion no realizada E2 / F25</li>
+                                <li>Dispensacion no realizada E4 / F16</li>
+                                <li>Falta stock Ibuprofen Cinfa 40 MG</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="rounded-lg bg-white p-4 shadow-sm">
+                        <h2 class="mb-3 text-[13px] font-bold uppercase text-apobot-navy/70">Nivel de prioridad</h2>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button class="priority-pill bg-apobot-cyan text-white">Normal</button>
+                            <button class="priority-pill bg-apobot-cyan text-white">Rapida</button>
+                            <button class="priority-pill bg-apobot-coral text-white">Urgente</button>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+
+        <aside class="flex w-[114px] shrink-0 flex-col bg-apobot-navy text-white">
+            <div class="grid h-20 place-items-center border-b border-white/10 px-4">
+                <img class="w-24" src="/assets/apobot/Logo_ApoBot.svg" alt="APObot" />
+            </div>
+            <nav class="flex flex-1 flex-col gap-2 px-3 py-5">
+                <a class="side-link side-link-active" href="#"><img src="/assets/apobot/icon_1_home.svg" alt="" />Inicio</a>
+                <a class="side-link" href="#"><img src="/assets/apobot/icon_2_stock.svg" alt="" />Stock</a>
+                <a class="side-link" href="#"><img src="/assets/apobot/icon_3_pedidos.svg" alt="" />Pedidos</a>
+                <a class="side-link" href="#"><img src="/assets/apobot/icon_4_carga.svg" alt="" />Carga</a>
+                <a class="side-link" href="#"><img src="/assets/apobot/icon_5_estadisticas.svg" alt="" />Estadisticas</a>
+                <a class="side-link" href="#"><img src="/assets/apobot/icon_6_avisos.svg" alt="" />Avisos</a>
+                <a class="side-link" href="#"><img src="/assets/apobot/icon_7_ajustes.svg" alt="" />Ajustes</a>
+            </nav>
+            <div class="space-y-3 px-4 pb-5">
+                <button class="grid h-10 w-full place-items-center rounded-lg border border-apobot-coral text-apobot-coral" aria-label="Pausar">
+                    <img class="size-5" src="/assets/apobot/icon_pausa.svg" alt="" />
+                </button>
+                <button class="grid h-10 w-full place-items-center rounded-lg border border-apobot-cyan text-apobot-cyan" aria-label="Apagar">
+                    <img class="size-5" src="/assets/apobot/icon_apagado.svg" alt="" />
+                </button>
+            </div>
+        </aside>
+    </section>
+</main>

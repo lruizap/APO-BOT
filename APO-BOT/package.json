@@ -1,0 +1,15 @@
+{
+  "name": "apo-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "APObot Blazor frontend assets",
+  "scripts": {
+    "css:build": "tailwindcss -i ./Styles/app.css -o ./wwwroot/app.css --minify",
+    "css:watch": "tailwindcss -i ./Styles/app.css -o ./wwwroot/app.css --watch"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "tailwindcss": "^4.3.2"
+  }
+}
