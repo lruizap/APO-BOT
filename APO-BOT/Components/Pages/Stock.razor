@@ -5,20 +5,21 @@
 
 <div class="stock-screen">
     <section class="stock-workspace">
-        <article class="panel product-list-panel @(selectedProduct is null ? "product-list-full" : "")">
+        <MudPaper Class="@ProductListClass" Elevation="0">
             <div class="product-table-head">
-                <label>Codigo<input @bind="query.Code" @bind:after="LoadStockAsync" aria-label="Filtrar por codigo" /></label>
-                <label class="active-filter">Descripcion<input @bind="query.Description" @bind:after="LoadStockAsync" aria-label="Filtrar por descripcion" /></label>
-                <label>Categoria<input @bind="query.Category" @bind:after="LoadStockAsync" aria-label="Filtrar por categoria" /></label>
-                <label>Stock<input type="number" min="0" @bind="query.MinimumStock" @bind:after="LoadStockAsync" aria-label="Filtrar por stock minimo" /></label>
-                <label>Observaciones<input @bind="query.Observation" @bind:after="LoadStockAsync" aria-label="Filtrar por observaciones" /></label>
+                <span class="mobile-stock-filter-label">Buscar por descripcion</span>
+                <MudTextField T="string" Label="Codigo" Variant="Variant.Text" Margin="Margin.Dense" Immediate="true" DebounceInterval="300" @bind-Value="query.Code" @bind-Value:after="LoadStockAsync" />
+                <MudTextField T="string" Class="active-filter" Label="Descripcion" Placeholder="Buscar por descripcion" Variant="Variant.Text" Margin="Margin.Dense" Immediate="true" DebounceInterval="300" @bind-Value="query.Description" @bind-Value:after="LoadStockAsync" />
+                <MudTextField T="string" Label="Categoria" Variant="Variant.Text" Margin="Margin.Dense" Immediate="true" DebounceInterval="300" @bind-Value="query.Category" @bind-Value:after="LoadStockAsync" />
+                <MudNumericField T="int?" Label="Stock" Variant="Variant.Text" Margin="Margin.Dense" Min="0" HideSpinButtons="true" Immediate="true" DebounceInterval="300" @bind-Value="query.MinimumStock" @bind-Value:after="LoadStockAsync" />
+                <MudTextField T="string" Label="Observaciones" Variant="Variant.Text" Margin="Margin.Dense" Immediate="true" DebounceInterval="300" @bind-Value="query.Observation" @bind-Value:after="LoadStockAsync" />
             </div>
             <div class="product-list">
                 @if (stock.Items.Count > 0)
                 {
                     @foreach (var product in stock.Items)
                     {
-                        <button class="product-row @(selectedProduct?.Id == product.Id ? "product-selected" : "")" type="button" @onclick="() => SelectProductAsync(product)">
+                        <MudButton Class="@ProductRowClass(product)" Variant="Variant.Text" OnClick="() => SelectProductAsync(product)">
                             <strong>@product.Code</strong>
                             <span>@product.Description</span>
                             <span>@product.Category</span>
@@ -33,7 +34,7 @@
                                     <i>Hacer pedido</i>
                                 }
                             </span>
-                        </button>
+                        </MudButton>
                     }
                 }
                 else
@@ -41,11 +42,11 @@
                     <BackendState Loading="stockLoading" Error="@stockError" Title="Sin productos" Detail="El inventario se mostrara cuando el backend devuelva resultados." />
                 }
             </div>
-        </article>
+        </MudPaper>
 
         @if (selectedProduct is not null)
         {
-            <article class="panel stock-units-panel">
+            <MudPaper Class="panel stock-units-panel" Elevation="0">
                 <div class="data-table-wrap">
                     <table class="data-table stock-units-table">
                         <thead>
@@ -56,7 +57,7 @@
                             {
                                 <tr>
                                     <td class="cyan-cell">@unit.Id</td><td>@unit.Module</td><td>@unit.Shelf</td><td>@unit.PositionX</td><td>@unit.PositionY</td><td>@unit.ExpirationDate?.ToString("MM/yyyy")</td><td>@unit.LoadedAt?.ToLocalTime().ToString("dd/MM/yyyy")</td><td>@unit.Batch</td><td>@unit.SerialNumber</td>
-                                    <td><button class="table-link table-link-view" type="button" @onclick="() => selectedUnit = unit">Ver</button><button class="table-link table-link-dispense" type="button" disabled="@(string.IsNullOrWhiteSpace(selectedOutputId) || dispensePending)" @onclick="() => DispenseUnitAsync(unit.Id)">Dispensar</button></td>
+                                    <td><MudButton Class="table-link table-link-view" Variant="Variant.Text" OnClick="() => selectedUnit = unit">Ver</MudButton><MudButton Class="table-link table-link-dispense" Variant="Variant.Text" Disabled="@(string.IsNullOrWhiteSpace(selectedOutputId) || dispensePending)" OnClick="() => DispenseUnitAsync(unit.Id)">Dispensar</MudButton></td>
                                 </tr>
                             }
                         </tbody>
@@ -66,12 +67,12 @@
                         <BackendState Loading="detailLoading" Error="@detailError" Compact="true" Title="Sin unidades" Detail="No hay envases asociados al producto." />
                     }
                 </div>
-            </article>
+            </MudPaper>
         }
     </section>
 
     <aside class="stock-detail">
-        <article class="panel product-detail-card @(selectedProduct is null ? "product-detail-empty" : "")">
+        <MudPaper Class="@ProductDetailClass" Elevation="0">
             @if (selectedProduct is null)
             {
                 <img src="/assets/apobot/ilustracion_cajas_balda.svg" alt="" />
@@ -100,35 +101,34 @@
             {
                 <BackendState Error="@detailError" Title="Detalle no disponible" Detail="No se ha podido obtener el producto." />
             }
-        </article>
+        </MudPaper>
 
         <div class="dispense-controls @(selectedProduct is null ? "controls-disabled" : "")">
-            <label class="control-card output-control">
-                <span>Salida</span>
-                <select @bind="selectedOutputId" disabled="@(selectedProduct is null || outputsLoading)">
-                    <option value="">Seleccione una salida</option>
+            <MudPaper Class="control-card output-control" Elevation="0">
+                <MudSelect T="string" Label="Salida" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="selectedOutputId" Disabled="@(selectedProduct is null || outputsLoading)">
+                    <MudSelectItem T="string" Value="@string.Empty">Seleccione una salida</MudSelectItem>
                     @foreach (var output in outputs.Where(output => output.Available))
                     {
-                        <option value="@output.Id">@output.Name</option>
+                        <MudSelectItem T="string" Value="@output.Id">@output.Name</MudSelectItem>
                     }
-                </select>
-            </label>
+                </MudSelect>
+            </MudPaper>
 
             <div class="quantity-control" aria-label="Unidades a dispensar">
-                <button type="button" @onclick="DecreaseQuantity" disabled="@(quantity == 0 || selectedProduct is null)">−</button>
+                <MudIconButton Icon="@Icons.Material.Rounded.Remove" Color="Color.Secondary" OnClick="DecreaseQuantity" Disabled="@(quantity == 0 || selectedProduct is null)" aria-label="Reducir unidades" />
                 <strong>@quantity <span>/ @(selectedProduct?.Stock ?? 0)</span></strong>
-                <button type="button" @onclick="IncreaseQuantity" disabled="@(selectedProduct is null || quantity >= selectedProduct.Stock)">+</button>
+                <MudIconButton Icon="@Icons.Material.Rounded.Add" Color="Color.Primary" OnClick="IncreaseQuantity" Disabled="@(selectedProduct is null || quantity >= selectedProduct.Stock)" aria-label="Aumentar unidades" />
             </div>
 
             <fieldset class="control-card priority-control" disabled="@(selectedProduct is null)">
                 <legend>Prioridad</legend>
                 @foreach (var level in PriorityOptions)
                 {
-                    <button class="@(selectedPriority == level.Priority ? "selected" : "")" type="button" @onclick="() => selectedPriority = level.Priority">@level.Label</button>
+                    <MudButton Class="@PriorityClass(level.Priority)" Variant="Variant.Text" OnClick="() => selectedPriority = level.Priority">@level.Label</MudButton>
                 }
             </fieldset>
 
-            <button class="primary-gradient-button" type="button" @onclick="DispenseAsync" disabled="@(!CanDispense)">Dispensar</button>
+            <MudButton Class="primary-gradient-button" Variant="Variant.Filled" Color="Color.Primary" OnClick="DispenseAsync" Disabled="@(!CanDispense)" StartIcon="@Icons.Material.Rounded.Send">Dispensar</MudButton>
             @if (!string.IsNullOrWhiteSpace(actionMessage))
             {
                 <p class="api-action-message" role="status">@actionMessage</p>
@@ -164,6 +164,10 @@
     private string? actionMessage;
 
     private bool CanDispense => selectedProduct is not null && quantity > 0 && !string.IsNullOrWhiteSpace(selectedOutputId) && !dispensePending;
+    private string ProductListClass => $"panel product-list-panel {(selectedProduct is null ? "product-list-full" : string.Empty)}";
+    private string ProductDetailClass => $"panel product-detail-card {(selectedProduct is null ? "product-detail-empty" : string.Empty)}";
+    private string ProductRowClass(ProductSummaryDto product) => $"product-row {(selectedProduct?.Id == product.Id ? "product-selected" : string.Empty)}";
+    private string PriorityClass(DispensationPriority priority) => selectedPriority == priority ? "selected" : string.Empty;
 
     protected override async Task OnInitializedAsync()
     {

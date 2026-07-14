@@ -1,7 +1,7 @@
 <div class="backend-state @(Compact ? "backend-state-compact" : "") @(Inverse ? "backend-state-inverse" : "")" role="status">
     @if (Loading)
     {
-        <span class="backend-state-spinner" aria-hidden="true"></span>
+        <MudProgressCircular Class="backend-state-spinner" Color="Color.Primary" Indeterminate="true" Size="Size.Medium" aria-hidden="true" />
         <strong>Cargando informacion</strong>
     }
     else if (!string.IsNullOrWhiteSpace(Error))

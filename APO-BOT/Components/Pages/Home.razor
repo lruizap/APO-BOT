@@ -5,7 +5,7 @@
 
 <div class="home-screen">
     <section class="home-column home-left">
-        <article class="capacity-card">
+        <MudPaper Class="capacity-card" Elevation="0">
             <div class="capacity-copy">
                 <h1>Capacidad<br />de almacenamiento</h1>
                 <div class="capacity-state">
@@ -30,9 +30,9 @@
             <div class="capacity-meter" style="--capacity:@CapacityCssValue" aria-label="@($"Capacidad al {CapacityPercentage} por ciento")">
                 <span><strong>@(dashboard is null ? "--" : CapacityPercentage.ToString("0"))</strong>%</span>
             </div>
-        </article>
+        </MudPaper>
 
-        <article class="camera-card">
+        <MudPaper Class="camera-card" Elevation="0">
             @if (SelectedCamera is not null)
             {
                 <img src="@SelectedCamera.StreamUrl" alt="@SelectedCamera.Name" />
@@ -49,19 +49,19 @@
                 <div class="camera-selector" aria-label="Seleccion de camara">
                     @foreach (var camera in dashboard.Cameras)
                     {
-                        <button class="@(selectedCameraId == camera.Id ? "camera-active" : "")" type="button" disabled="@(!camera.Available)" @onclick="() => selectedCameraId = camera.Id"><i></i>@camera.Name</button>
+                        <MudButton Class="@CameraButtonClass(camera)" Variant="Variant.Text" Disabled="@(!camera.Available)" OnClick="() => selectedCameraId = camera.Id"><i></i>@camera.Name</MudButton>
                     }
                 </div>
             }
-        </article>
+        </MudPaper>
     </section>
 
     <section class="home-column home-right">
-        <article class="panel exits-panel">
+        <MudPaper Class="panel exits-panel" Elevation="0">
             <header class="panel-heading">
                 <div class="heading-symbol">▦</div>
                 <h2>Ultimas<br />salidas <span>›</span></h2>
-                <a href="/estadisticas">Ver salidas</a>
+                <MudButton Href="/estadisticas" Variant="Variant.Text">Ver salidas</MudButton>
             </header>
             <div class="exit-list">
                 @if (dashboard?.RecentDispensations.Count > 0)
@@ -80,9 +80,9 @@
                     <BackendState Loading="loading" Error="@error" Compact="true" Title="Sin salidas" Detail="No hay dispensaciones recientes." />
                 }
             </div>
-        </article>
+        </MudPaper>
 
-        <article class="alerts-card" id="avisos">
+        <MudPaper Class="alerts-card" Elevation="0" id="avisos">
             <div class="alerts-count">
                 <div><span>!</span><strong>@(dashboard?.Alerts.Count(alert => !alert.Resolved).ToString() ?? "--")</strong></div>
                 <h2>Avisos</h2>
@@ -92,7 +92,7 @@
                 <ul>
                     @foreach (var alert in ActiveAlerts.Take(3))
                     {
-                        <li><button type="button" disabled="@actionPending" aria-label="Marcar aviso como resuelto" @onclick="() => ResolveAlertAsync(alert.Id)"></button><span>@alert.Message</span>@if (!string.IsNullOrWhiteSpace(alert.Location)) { <strong>@alert.Location</strong> }</li>
+                        <li><MudIconButton Icon="@Icons.Material.Rounded.Check" Disabled="@actionPending" aria-label="Marcar aviso como resuelto" OnClick="() => ResolveAlertAsync(alert.Id)" /><span>@alert.Message</span>@if (!string.IsNullOrWhiteSpace(alert.Location)) { <strong>@alert.Location</strong> }</li>
                     }
                 </ul>
             }
@@ -100,19 +100,19 @@
             {
                 <BackendState Loading="loading" Error="@error" Compact="true" Inverse="true" Title="Sin avisos" Detail="No hay alertas activas." />
             }
-        </article>
+        </MudPaper>
 
-        <article class="panel priority-card">
+        <MudPaper Class="panel priority-card" Elevation="0">
             <h2>Nivel de prioridad</h2>
             <div class="priority-options">
                 @foreach (var priority in PriorityOptions)
                 {
-                    <button class="priority-option @(dashboard?.PriorityMode == priority.Mode ? "priority-selected" : "")" type="button" disabled="@(dashboard is null || actionPending)" @onclick="() => SetPriorityAsync(priority.Mode)">
+                    <MudButton Class="@PriorityButtonClass(priority.Mode)" Variant="Variant.Filled" Disabled="@(dashboard is null || actionPending)" OnClick="() => SetPriorityAsync(priority.Mode)">
                         <span aria-hidden="true">@priority.Rank</span>@priority.Label
-                    </button>
+                    </MudButton>
                 }
             </div>
-        </article>
+        </MudPaper>
     </section>
 </div>
 
@@ -134,6 +134,8 @@
     private string CapacityCssValue => $"{CapacityPercentage.ToString("0.##", CultureInfo.InvariantCulture)}%";
     private IReadOnlyList<AlertDto> ActiveAlerts => dashboard?.Alerts.Where(alert => !alert.Resolved).ToArray() ?? [];
     private CameraFeedDto? SelectedCamera => dashboard?.Cameras.FirstOrDefault(camera => camera.Id == selectedCameraId && camera.Available);
+    private string CameraButtonClass(CameraFeedDto camera) => selectedCameraId == camera.Id ? "camera-active" : string.Empty;
+    private string PriorityButtonClass(PriorityMode mode) => $"priority-option {(dashboard?.PriorityMode == mode ? "priority-selected" : string.Empty)}";
 
     protected override async Task OnInitializedAsync()
     {

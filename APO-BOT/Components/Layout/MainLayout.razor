@@ -1,12 +1,18 @@
 @inherits LayoutComponentBase
 @inject IApoBotApiClient Api
+@using APO_BOT.Theme
 
-<div class="app-shell">
+<MudThemeProvider Theme="@ApoBotTheme.Default" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<div class="app-shell mud-apobot-shell">
     <div class="app-stage">
-        <header class="topbar">
-            <button class="topbar-menu" type="button" aria-label="Abrir menu">
+        <MudPaper Class="topbar" Square="true" Elevation="0">
+            <MudButton Class="topbar-menu" Variant="Variant.Text" aria-label="Abrir menu">
                 <img src="/assets/apobot/icon_menu.svg" alt="" />
-            </button>
+            </MudButton>
 
             <div class="topbar-identity">
                 <span class="topbar-item">
@@ -27,67 +33,67 @@
             {
                 <time class="topbar-time">--/--/---- <span>--:-- H</span></time>
             }
-        </header>
+        </MudPaper>
 
-        <main class="app-content">
+        <MudMainContent Class="app-content">
             @Body
-        </main>
+        </MudMainContent>
     </div>
 
-    <aside class="app-sidebar" aria-label="Navegacion principal">
+    <MudPaper Class="app-sidebar" Square="true" Elevation="0" aria-label="Navegacion principal">
         <div class="sidebar-logo">
             <img src="/assets/apobot/Logo_ApoBot.svg" alt="APObot by Apotheka" />
         </div>
 
-        <nav class="sidebar-nav">
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" Match="NavLinkMatch.All" href="/">
+        <MudNavMenu Class="sidebar-nav">
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" Match="NavLinkMatch.All" href="/">
                 <img src="/assets/apobot/icon_1_home.svg" alt="" />
                 <span>Inicio</span>
-            </NavLink>
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/stock">
+            </MudNavLink>
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" href="/stock">
                 <img src="/assets/apobot/icon_2_stock.svg" alt="" />
                 <span>Stock</span>
-            </NavLink>
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/pedidos">
+            </MudNavLink>
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" href="/pedidos">
                 <img src="/assets/apobot/icon_3_pedidos.svg" alt="" />
                 <span>Pedidos</span>
-            </NavLink>
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/carga">
+            </MudNavLink>
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" href="/carga">
                 <img src="/assets/apobot/icon_4_carga.svg" alt="" />
                 <span>Carga</span>
-            </NavLink>
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/estadisticas">
+            </MudNavLink>
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" href="/estadisticas">
                 <img src="/assets/apobot/icon_5_estadisticas.svg" alt="" />
                 <span>Estadisticas</span>
-            </NavLink>
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/avisos">
+            </MudNavLink>
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" href="/avisos">
                 <span class="nav-icon-badge">
                     <img src="/assets/apobot/icon_6_avisos.svg" alt="" />
                     <b>@(context?.AlertCount.ToString() ?? "--")</b>
                 </span>
                 <span>Avisos</span>
-            </NavLink>
-            <NavLink class="nav-entry" ActiveClass="nav-entry-active" href="/ajustes">
+            </MudNavLink>
+            <MudNavLink class="nav-entry" ActiveClass="nav-entry-active" href="/ajustes">
                 <img src="/assets/apobot/icon_7_ajustes.svg" alt="" />
                 <span>Ajustes</span>
-            </NavLink>
-        </nav>
+            </MudNavLink>
+        </MudNavMenu>
 
         <div class="sidebar-controls">
-            <button class="light-toggle @(context?.LightOn == true ? "light-toggle-on" : "light-toggle-off")" type="button" @onclick="ToggleLightAsync" aria-pressed="@(context?.LightOn == true)" disabled="@(context is null || commandPending)">
+            <MudButton Class="@LightToggleClass" Variant="Variant.Text" OnClick="ToggleLightAsync" aria-pressed="@(context?.LightOn == true)" Disabled="@(context is null || commandPending)">
                 <img src="/assets/apobot/@(context?.LightOn == true ? "icon_luz_ON.svg" : "icon_luz_OFF.svg")" alt="" />
                 <span class="visually-hidden">Luz @(context?.LightOn == true ? "encendida" : "apagada")</span>
-            </button>
+            </MudButton>
             <div class="machine-actions">
-                <button type="button" class="machine-button machine-pause" aria-label="Pausar" disabled="@(context is null || commandPending)" @onclick="() => ExecuteMachineActionAsync(MachineAction.Pause)">
+                <MudButton Class="machine-button machine-pause" Variant="Variant.Outlined" aria-label="Pausar" Disabled="@(context is null || commandPending)" OnClick="() => ExecuteMachineActionAsync(MachineAction.Pause)">
                     <img src="/assets/apobot/icon_pausa.svg" alt="" />
-                </button>
-                <button type="button" class="machine-button machine-power" aria-label="Apagar" disabled="@(context is null || commandPending)" @onclick="() => ExecuteMachineActionAsync(MachineAction.PowerOff)">
+                </MudButton>
+                <MudButton Class="machine-button machine-power" Variant="Variant.Outlined" aria-label="Apagar" Disabled="@(context is null || commandPending)" OnClick="() => ExecuteMachineActionAsync(MachineAction.PowerOff)">
                     <img src="/assets/apobot/icon_apagado.svg" alt="" />
-                </button>
+                </MudButton>
             </div>
         </div>
-    </aside>
+    </MudPaper>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
@@ -99,6 +105,7 @@
 @code {
     private SystemContextDto? context;
     private bool commandPending;
+    private string LightToggleClass => $"light-toggle {(context?.LightOn == true ? "light-toggle-on" : "light-toggle-off")}";
 
     protected override async Task OnInitializedAsync()
     {

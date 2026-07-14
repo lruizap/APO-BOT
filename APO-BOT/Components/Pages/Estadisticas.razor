@@ -7,44 +7,44 @@
     <section class="stats-content">
         @if (activeHistory == HistoryType.Capacity)
         {
-            <article class="panel chart-panel">
+            <MudPaper Class="panel chart-panel" Elevation="0">
                 <header class="chart-heading">
                     <h1>Historico de carga/dispensacion</h1>
                     <div class="chart-legend"><span class="legend-coral">Envases cargados</span><span class="legend-cyan">Envases dispensados</span></div>
                     <div class="period-switch">
                         @foreach (var period in PeriodOptions)
                         {
-                            <button class="@(topPeriod == period.Period ? "selected" : "")" type="button" @onclick="() => SetTopPeriodAsync(period.Period)">@period.Label</button>
+                            <MudButton Class="@TopPeriodClass(period.Period)" Variant="Variant.Text" OnClick="() => SetTopPeriodAsync(period.Period)">@period.Label</MudButton>
                         }
                     </div>
                 </header>
                 <BarChart Points="throughputStatistics.Throughput" Loading="topLoading" Error="@topError" AriaLabel="Grafico de envases cargados y dispensados" />
-            </article>
+            </MudPaper>
 
-            <article class="panel chart-panel capacity-chart-panel">
+            <MudPaper Class="panel chart-panel capacity-chart-panel" Elevation="0">
                 <header class="chart-heading">
                     <h2>Historico de capacidad</h2>
                     <div class="chart-legend"><span class="legend-coral">Envases almacenados</span><span class="legend-cyan">Envases hueco libre</span></div>
                     <div class="period-switch">
                         @foreach (var period in PeriodOptions)
                         {
-                            <button class="@(bottomPeriod == period.Period ? "selected" : "")" type="button" @onclick="() => SetBottomPeriodAsync(period.Period)">@period.Label</button>
+                            <MudButton Class="@BottomPeriodClass(period.Period)" Variant="Variant.Text" OnClick="() => SetBottomPeriodAsync(period.Period)">@period.Label</MudButton>
                         }
                     </div>
                 </header>
                 <AreaChart Points="capacityStatistics.Capacity" Loading="bottomLoading" Error="@bottomError" AriaLabel="Grafico del historico de capacidad" />
-            </article>
+            </MudPaper>
         }
         else
         {
-            <article class="panel history-table-panel">
+            <MudPaper Class="panel history-table-panel" Elevation="0">
                 <h1>@SuccessfulHistoryTitle</h1>
                 <HistoryTable Items="history.Successful.Items" Loading="historyLoading" Error="@historyError" />
-            </article>
-            <article class="panel history-table-panel">
+            </MudPaper>
+            <MudPaper Class="panel history-table-panel" Elevation="0">
                 <h2>@RejectedHistoryTitle</h2>
                 <HistoryTable Items="history.Rejected.Items" Loading="historyLoading" Error="@historyError" Rejected="true" />
-            </article>
+            </MudPaper>
         }
     </section>
 
@@ -52,7 +52,7 @@
         <h2>Historicos</h2>
         @foreach (var option in HistoryOptions)
         {
-            <button class="@(activeHistory == option.Type ? "selected" : "")" type="button" @onclick="() => SetHistoryAsync(option.Type)">De @option.Label</button>
+            <MudButton Class="@HistoryButtonClass(option.Type)" Variant="Variant.Text" OnClick="() => SetHistoryAsync(option.Type)">De @option.Label</MudButton>
         }
     </aside>
 </div>
@@ -85,6 +85,9 @@
     private string? historyError;
     private string? topError;
     private string? bottomError;
+    private string TopPeriodClass(StatisticsPeriod period) => topPeriod == period ? "selected" : string.Empty;
+    private string BottomPeriodClass(StatisticsPeriod period) => bottomPeriod == period ? "selected" : string.Empty;
+    private string HistoryButtonClass(HistoryType type) => activeHistory == type ? "selected" : string.Empty;
 
     private string SuccessfulHistoryTitle => activeHistory switch
     {
